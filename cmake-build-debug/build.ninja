@@ -49,8 +49,8 @@ cmake_ninja_workdir = C$:/Code/projects/sdsu-projects/cmake-build-debug/
 
 build cmake_object_order_depends_target_sdsu_projects: phony || .
 
-build CMakeFiles/sdsu_projects.dir/main.cpp.obj: CXX_COMPILER__sdsu_projects_unscanned_Debug C$:/Code/projects/sdsu-projects/main.cpp || cmake_object_order_depends_target_sdsu_projects
-  DEP_FILE = CMakeFiles\sdsu_projects.dir\main.cpp.obj.d
+build CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.obj: CXX_COMPILER__sdsu_projects_unscanned_Debug C$:/Code/projects/sdsu-projects/Ong_Jaden.cpp || cmake_object_order_depends_target_sdsu_projects
+  DEP_FILE = CMakeFiles\sdsu_projects.dir\Ong_Jaden.cpp.obj.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\sdsu_projects.dir
   OBJECT_FILE_DIR = CMakeFiles\sdsu_projects.dir
@@ -65,7 +65,7 @@ build CMakeFiles/sdsu_projects.dir/main.cpp.obj: CXX_COMPILER__sdsu_projects_uns
 #############################################
 # Link the executable sdsu_projects.exe
 
-build sdsu_projects.exe: CXX_EXECUTABLE_LINKER__sdsu_projects_Debug CMakeFiles/sdsu_projects.dir/main.cpp.obj
+build sdsu_projects.exe: CXX_EXECUTABLE_LINKER__sdsu_projects_Debug CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\sdsu_projects.dir
