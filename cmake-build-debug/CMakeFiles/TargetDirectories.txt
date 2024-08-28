@@ -1,0 +1,3 @@
+C:/Code/projects/sdsu-projects/cmake-build-debug/CMakeFiles/sdsu_projects.dir
+C:/Code/projects/sdsu-projects/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Code/projects/sdsu-projects/cmake-build-debug/CMakeFiles/rebuild_cache.dir
