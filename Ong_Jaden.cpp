@@ -10,7 +10,7 @@ public:
     }
     /* This is your game board*/
 
-    //I am re testing!!!
+    // I am very glad that github works now
 
     vector<vector<char>> gameBoard
 {
