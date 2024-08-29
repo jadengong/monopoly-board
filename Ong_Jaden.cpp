@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <vector>
+#include <list>
 
 using namespace std;
 class TicTacToe {
@@ -14,6 +15,10 @@ public:
 
 
     }
+
+
+
+
     /* This is your game board*/
 
 
@@ -23,22 +28,6 @@ public:
     {'4', '5', '6'},
     {'7', '8', '9'}
 };
-
-    int main() {
-
-        int playerTemp = randomTurn();
-
-        cout << "It is player " << playerTemp << "'s turn.";
-        cout << "Player " << playerTemp << ", please enter an open position on the gameboard.";
-
-        // active game start for player
-
-        int positionTemp = getPosition();
-
-        modifyGameBoard(playerTemp, positionTemp);
-
-
-    }
 
 
 
@@ -55,41 +44,62 @@ public:
         }
     }
 
-    int getPosition() { // for players
-        int position;
-        cin >> position; // get position a player wants to make a move on
-        // i want to have error handling here in case a position inputted is not between 1 and 9 or is taken
-
-        if(position < 1 || position > 9) {
-            throw out_of_range("Position is not within the gameboard. Please enter another position.");
-        }else if (gameBoard[position - 1] != ' ') {
-            throw invalid_argument("The position you entered is already taken. Please enter another position.");
-        }
+    int main() {
 
 
-        return position;
+        while(true) {
+
+            int playerTemp;
+
+
+            cout << "It is player " << playerTemp << "'s turn.";
+            cout << "Player " << playerTemp << ", please enter an open position on the gameboard.";
+
+            int positionTemp;
+            cin >> positionTemp;
+            while(positionTemp < 1 || positionTemp > 9 || positionTemp != ' '){
+                cout << "Invalid input, please enter another position." << endl;
+            }
+
+                modifyGameBoard(playerTemp, positionTemp);
+                std::string result = checkWinner();
+                if(result.length() > 0) {
+                    cout << result << endl;
+                    break;
+                }
+
+
+
+            }
+    }
+
+    std::string checkWinner() {
+
+        std::vector<std::vector<int>> winningPositions = {
+            {1,2,3}, {4,5,6}, {7,8,9}, // row wins
+            {1,4,7}, {2,5,8}, {3,6,9}, // column wins
+            {1,5,9}, {7,5,3}            // cross/diagnonal wins
+
+        };
+
+        for() {
+
+
 
     }
 
-    char randomTurn() { // randomize who gets to start the game
-        int result;
-        result = rand() % 100 + 1; // range from 1 to 100
 
-        if(result >= 50) {
-            return 'X';
-        }
-            return 'O';
-    }
 
 
 
     /* This method modifes the game board*/
-    void modifyGameBoard(char player, int position) // can add argument, cant adjust current args
+    void modifyGameBoard(char player, int position) // place piece
+
     {
         /*write code to modify the game board here*/
 
 
-        gameBoard[player][position] = player;
+        gameBoard[][] =
 
 
 
