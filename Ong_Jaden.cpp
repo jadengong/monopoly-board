@@ -55,7 +55,7 @@ public:
         }
     }
 
-    int getPosition() {
+    int getPosition() { // for players
         int position;
         cin >> position; // get position a player wants to make a move on
         // i want to have error handling here in case a position inputted is not between 1 and 9 or is taken
