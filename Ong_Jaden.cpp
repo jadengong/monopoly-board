@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <random>
 
 using namespace std;
 class TicTacToe {
@@ -49,9 +50,15 @@ public:
 
 
     char determinePlayer() { // kind of random way to decide who starts
-        int temp;
-        temp = rand() % 100 + 1; // 1 to 100
-        if(temp > 50) {
+
+        srand(time(0));
+
+        int random_number;
+        random_number = std::rand() % 100 + 1; // 1 to 100
+
+
+
+        if(random_number % 2 == 0) { // after testing i realized this 'random' generator generates a slowly incrementing number after every run, so i thought even or odd would be a good determiner for who goes first
             return 'X';
         }else {
             return 'O';
@@ -102,8 +109,6 @@ public:
     {
         /*write code to modify the game board here*/
 
-        player = ' ';
-
         if(player == 'X') {
             playerXPositions.push_back(position);
         }else {
@@ -115,28 +120,28 @@ public:
                 gameBoard[0][0] = player;
                 break;
             case 2:
-                gameBoard[0][2] = player;
+                gameBoard[0][1] = player;
                 break;
             case 3:
-                gameBoard[0][4] = player;
+                gameBoard[0][2] = player;
                 break;
             case 4:
-                gameBoard[2][0] = player;
+                gameBoard[1][0] = player;
                 break;
             case 5:
-                gameBoard[2][2] = player;
+                gameBoard[1][1] = player;
                 break;
             case 6:
-                gameBoard[2][4] = player;
+                gameBoard[1][2] = player;
                 break;
             case 7:
-                gameBoard[4][0] = player;
+                gameBoard[2][0] = player;
                 break;
             case 8:
-                gameBoard[4][2] = player;
+                gameBoard[2][1] = player;
                 break;
             case 9:
-                gameBoard[4][4] = player;
+                gameBoard[2][2] = player;
                 break;
             default:
                 break;
@@ -156,11 +161,13 @@ int main() {
     game.printGameBoard();
     char currentPlayer = game.determinePlayer();
 
+
+
     while(true) {
 
 
-        cout << "It is player " << currentPlayer << "'s turn.";
-        cout << "Player " << currentPlayer << ", please enter an open position on the gameboard.";
+        cout << "It is player " << currentPlayer << "'s turn." << endl;
+        cout << "Player " << currentPlayer << ", please enter an open position on the gameboard." << endl;
 
 
         // input
@@ -185,5 +192,6 @@ int main() {
         currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
 
     }
+
     return 0; // i have learned that main has to be int and returns 0 on close.
 }
