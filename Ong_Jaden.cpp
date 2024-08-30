@@ -89,9 +89,11 @@ public:
                 return "Player O wins!";
             }else if(containsAll(playerXPositions, a)) {
                 return "Player X wins!";
-            }else if(playerOPositions.size() + playerXPositions.size() == 9) {
-                return "The game ends in a draw.";
             }
+        }
+
+        if(playerOPositions.size() + playerXPositions.size() == 9) { // DRAW CONDITION
+            return "The game ends in a draw.";
         }
 
         return "";
@@ -169,20 +171,23 @@ public:
 
 int main() {
     TicTacToe game;
+
+    cout << "TIC TAC TOE" << endl;
     char currentPlayer = game.determinePlayer();
 
 
     while(true) {
         game.printGameBoard();
 
-        cout << "It is player " << currentPlayer << "'s turn." << endl;
-        cout << "Player " << currentPlayer << ", please enter an open position on the gameboard." << endl;
+      //  cout << "It is player " << currentPlayer << "'s turn." << endl;
+      //  cout << "Player " << currentPlayer << ", please enter an open position on the gameboard." << endl;
+        cout << "Player " << currentPlayer << " Enter Position : " << endl;
 
 
         // input
         int currentPosition;
         cin >> currentPosition;
-        while(currentPosition < 1 || currentPosition > 9 || !game.isPositionAvailable(currentPosition)){
+        while(currentPosition < 1 || currentPosition > 9 || !game.isPositionAvailable(currentPosition)){ // ILLEGAL MOVE CHECK
                 cout << "Invalid input, please enter another position." << endl;
                 cin >> currentPosition;
 
@@ -191,8 +196,9 @@ int main() {
         game.modifyGameBoard(game.gameBoard, currentPlayer, currentPosition); // playerPosition lists updated there
         std::string result = game.checkWinner();
         if(result.length() > 0) { // have to check winner after every entry in the event that the last entry is a winning one
-            cout << result << endl;
             game.printGameBoard();
+            cout << result << endl;
+            cout << "GAME OVER." << endl;
             break;
         }
 
