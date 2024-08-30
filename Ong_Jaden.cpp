@@ -192,6 +192,7 @@ int main() {
         std::string result = game.checkWinner();
         if(result.length() > 0) { // have to check winner after every entry in the event that the last entry is a winning one
             cout << result << endl;
+            game.printGameBoard();
             break;
         }
 
