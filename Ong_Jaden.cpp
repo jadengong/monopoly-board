@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
-#include <list>
 #include <random>
 
 using namespace std;
@@ -104,11 +103,10 @@ public:
 
 
     /* This method modifes the game board*/
-    void modifyGameBoard(vector<vector<char>> gameBoard, char player, int position) // added the gameboard parameter, but i realized i can't just pass char[][], so i had to google what the c++ equivalent was
+    void modifyGameBoard(vector<vector<char>>& gameBoard, char player, int position) // added the gameboard parameter, but i realized i can't just pass char[][], so i had to google what the c++ equivalent was
 
     {
         /*write code to modify the game board here*/
-
         if(player == 'X') {
             playerXPositions.push_back(position);
         }else {
@@ -146,25 +144,19 @@ public:
             default:
                 break;
         }
-
-
-
-
-
-
     }
 };
 
 
+
+
 int main() {
     TicTacToe game;
-    game.printGameBoard();
     char currentPlayer = game.determinePlayer();
 
 
-
     while(true) {
-
+        game.printGameBoard();
 
         cout << "It is player " << currentPlayer << "'s turn." << endl;
         cout << "Player " << currentPlayer << ", please enter an open position on the gameboard." << endl;
@@ -180,7 +172,6 @@ int main() {
         }
 
         game.modifyGameBoard(game.gameBoard, currentPlayer, currentPosition); // playerPosition lists updated there
-        game.printGameBoard();
         std::string result = game.checkWinner();
         if(result.length() > 0) { // have to check winner after every entry in the event that the last entry is a winning one
             cout << result << endl;
