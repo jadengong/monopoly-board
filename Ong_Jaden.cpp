@@ -145,6 +145,23 @@ public:
                 break;
         }
     }
+
+    bool isPositionAvailable(int position) {
+
+        int row = (position - 1) / 3;
+        int col = (position - 1) % 3;
+
+        if(gameBoard[row][col] != 'X' && gameBoard[row][col] != 'O') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+
+
+    // end of class
 };
 
 
@@ -165,10 +182,10 @@ int main() {
         // input
         int currentPosition;
         cin >> currentPosition;
-        while(currentPosition < 1 || currentPosition > 9){
-            if(game.playerXPositions[currentPosition] != ' ' || game.playerOPositions[currentPosition] != ' ') {
+        while(currentPosition < 1 || currentPosition > 9 || !game.isPositionAvailable(currentPosition)){
                 cout << "Invalid input, please enter another position." << endl;
-            }
+                cin >> currentPosition;
+
         }
 
         game.modifyGameBoard(game.gameBoard, currentPlayer, currentPosition); // playerPosition lists updated there
