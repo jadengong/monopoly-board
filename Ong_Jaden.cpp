@@ -47,41 +47,6 @@ public:
         }
     }
 
-    int main() {
-
-            printGameBoard();
-            char currentPlayer = determinePlayer();
-
-        while(true) {
-
-
-            cout << "It is player " << currentPlayer << "'s turn.";
-            cout << "Player " << currentPlayer << ", please enter an open position on the gameboard.";
-
-
-            // input
-            int currentPosition;
-            cin >> currentPosition;
-            while(currentPosition < 1 || currentPosition > 9){
-                if(playerXPositions[currentPosition] != ' ' || playerOPositions[currentPosition] != ' ') {
-                    cout << "Invalid input, please enter another position." << endl;
-                }
-            }
-
-                modifyGameBoard(gameBoard, currentPlayer, currentPosition); // playerPosition lists updated there
-                std::string result = checkWinner();
-                if(result.length() > 0) { // have to check winner after every entry in the event that the last entry is a winning one
-                    cout << result << endl;
-                    break;
-                }
-
-
-            // switch players
-            currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
-
-            }
-        return 0; // i have learned that main has to be int and returns 0 on close.
-    }
 
     char determinePlayer() { // kind of random way to decide who starts
         int temp;
@@ -184,3 +149,41 @@ public:
 
     }
 };
+
+
+int main() {
+    TicTacToe game;
+    game.printGameBoard();
+    char currentPlayer = game.determinePlayer();
+
+    while(true) {
+
+
+        cout << "It is player " << currentPlayer << "'s turn.";
+        cout << "Player " << currentPlayer << ", please enter an open position on the gameboard.";
+
+
+        // input
+        int currentPosition;
+        cin >> currentPosition;
+        while(currentPosition < 1 || currentPosition > 9){
+            if(game.playerXPositions[currentPosition] != ' ' || game.playerOPositions[currentPosition] != ' ') {
+                cout << "Invalid input, please enter another position." << endl;
+            }
+        }
+
+        game.modifyGameBoard(game.gameBoard, currentPlayer, currentPosition); // playerPosition lists updated there
+        game.printGameBoard();
+        std::string result = game.checkWinner();
+        if(result.length() > 0) { // have to check winner after every entry in the event that the last entry is a winning one
+            cout << result << endl;
+            break;
+        }
+
+
+        // switch players
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+
+    }
+    return 0; // i have learned that main has to be int and returns 0 on close.
+}
