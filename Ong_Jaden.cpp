@@ -175,8 +175,8 @@ int main() {
     cout << "TIC TAC TOE" << endl;
     char currentPlayer = game.determinePlayer();
 
-
-    while(true) {
+    bool gameOver = false;
+    while(!gameOver) {
         game.printGameBoard();
 
       //  cout << "It is player " << currentPlayer << "'s turn." << endl;
@@ -188,8 +188,16 @@ int main() {
         int currentPosition;
         cin >> currentPosition;
         while(currentPosition < 1 || currentPosition > 9 || !game.isPositionAvailable(currentPosition)){ // ILLEGAL MOVE CHECK
+            if(!cin >> currentPosition) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cout << "This is not an integer position, enter one: " << endl;
+                cin >> currentPosition;
+
+            }else {
                 cout << "Invalid input, please enter another position." << endl;
                 cin >> currentPosition;
+            }
 
         }
 
@@ -199,12 +207,14 @@ int main() {
             game.printGameBoard();
             cout << result << endl;
             cout << "GAME OVER." << endl;
-            break;
+            gameOver = true;
         }
 
 
         // switch players
-        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+        if(!gameOver) {
+            currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+        }
 
     }
 
