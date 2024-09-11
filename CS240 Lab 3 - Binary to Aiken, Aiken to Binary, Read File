@@ -1,0 +1,670 @@
+jal main
+#                                           CS 240, Lab #3
+# 
+#                                          IMPORTATNT NOTES:
+# 
+#                       Write your assembly code only in the marked blocks.
+# 
+#                     	DO NOT change anything outside the marked blocks.
+# 
+#               Remember to fill in your name, student ID in the designated sections.
+# 
+#
+j main
+###############################################################
+#                           Data Section
+.data
+# 
+# Fill in your name, student ID in the designated sections.
+# 
+student_name: .asciiz "Jaden Ong"
+student_id: .asciiz "130829085"
+
+new_line: .asciiz "\n"
+space: .asciiz " "
+testing_label: .asciiz ""
+unsigned_addition_label: .asciiz "Unsigned Addition (Hexadecimal Values)\nExpected Output:\n0154B8FB06E97360 BAC4BABA1BBBFDB9 00AA8FAD921FE305 \nObtained Output:\n"
+fibonacci_label: .asciiz "Fibonacci\nExpected Output:\n0 1 5 55 6765 3524578 \nObtained Output:\n"
+file_label: .asciiz "File I/O\nObtained Output:\n"
+
+addition_test_data_A:	.word 0xeee94560, 0x0154a8d0, 0x09876543, 0x000ABABA, 0xFEABBAEF, 0x00a9b8c7
+addition_test_data_B:	.word 0x18002e00, 0x0000102a, 0x12349876, 0xBABA0000, 0x93742816, 0x0000d6e5
+
+fibonacci_test_data:	.word  0, 1, 2, 3, 5, 6, 
+
+bcd_2_bin_lbl: .asciiz "\nAiken to Binary (Hexadecimal Values)\nExpected output:\n004CC853 00BC614E 00008AE0\nObtained output:\n"
+bin_2_bcd_lbl: .asciiz "\nBinary to Aiken (Hexadecimal Values) \nExpected output:\n0B03201F 0CC3C321 000CBB3B\nObtained output:\n"
+
+
+bcd_2_bin_test_data: .word 0x0B03201F, 0x1234BCDE, 0x3BBB2
+
+bin_2_bcd_test_data: .word 0x4CC853, 0x654321, 0xFFFF
+
+
+hex_digits: .byte '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'
+
+file_name:
+	.asciiz	"lab3_data.dat"	# File name
+	.word	0
+read_buffer:
+	.space	300			# Place to store character
+###############################################################
+#                           Text Section
+.text
+# Utility function to print hexadecimal numbers
+print_hex:
+move $t0, $a0
+li $t1, 8 # digits
+lui $t2, 0xf000 # mask
+mask_and_print:
+# print last hex digit
+and $t4, $t0, $t2 
+srl $t4, $t4, 28
+la    $t3, hex_digits  
+add   $t3, $t3, $t4 
+lb    $a0, 0($t3)            
+li    $v0, 11                
+syscall 
+# shift 4 times
+sll $t0, $t0, 4
+addi $t1, $t1, -1
+bgtz $t1, mask_and_print
+exit:
+jr $ra
+###############################################################
+###############################################################
+###############################################################
+#                           PART 1 (Unsigned Addition)
+# You are given two 64-bit numbers A,B located in 4 registers
+# $t0 and $t1 for lower and upper 32-bits of A and $t2 and $t3
+# for lower and upper 32-bits of B, You need to store the result
+# of the unsigned addition in $t4 and $t5 for lower and upper 32-bits.
+#
+.globl Unsigned_Add_64bit
+Unsigned_Add_64bit:
+move $t0, $a0
+move $t1, $a1
+move $t2, $a2
+move $t3, $a3
+############################## Part 1: your code begins here ###
+
+# use addu to add the contents of registers t1 and t3, t0 and t2 
+# to determine an overflow in the first adding, t4 must be less than BOTH t2 and t0
+
+addu $t4, $t0, $t2 # add the first bits
+
+# overflow check 
+
+# continue using unsigned for all the branch or add instructions
+bltu $t4, $t2, secondCheck # check if the sum is less than one of the two addants
+j continue # if t4 is greater than one of the two, no overflow has occurred, we can proceed
+
+secondCheck:
+
+bltu  $t4, $t0, overflow # check if the sum is less than the other addant
+j continue # in the second check, t4 was less than t2 but not t0, so we continue
+
+overflow:
+
+addiu $t1, $t1, 1 
+
+continue:
+
+addu $t5, $t1, $t3 # add the other bits, and we don't need to worry about overflow here 
+
+endOne:
+
+
+
+############################## Part 1: your code ends here   ###
+move $v0, $t4
+move $v1, $t5
+jr $ra
+###############################################################
+###############################################################
+###############################################################
+#                            PART 2 (Aiken Code to Binary)
+# 
+# You are given a 32-bits integer stored in $t0. This 32-bits
+# present a Aiken number. You need to convert it to a binary number.
+# For example: 0xDCB43210 should return 0x48FF4EA.
+# The result must be stored inside $t0 as well.
+.globl aiken2bin
+aiken2bin:
+move $t0, $a0
+############################ Part 2: your code begins here ###
+
+# aiken to binary 
+# extract first 4 bits via masking ; check if > 4 (-6 if so) ; mult result by multiplier ; add num to result
+# discard the set of bits using SLL ; repeat 8 times using a counter
+
+
+
+
+addi $t6, $0, 4 # to be used as a checker in the loop
+
+# two registers, $t2 and $t3, to be my multiplier and result
+addi $t2, $0, 10 # multiplier
+addi $t3, $0, 0 # result
+
+# counter initialization
+addi $t4, $0, 8 # count
+
+
+loopAiken: 
+
+# andi $t7, $t0, 0xF0000000 # apply the mask to isolate first 4 and store them in t7
+
+# apparently when you try to use a mask like the one commented above this line, the compiler doesn't
+# like it and gives an arithmetic overflow at runtime, so i tried another way to isolate the bits.
+# i tried to use ori mask and put the mask in a separate register as well
+
+srl $t7, $t0, 28   # srl 28 times to move the first 4 bits to the end
+andi $t7, $t7, 0xF # extract those 4 bits with this mask
+
+bgt $t7, $t6, subtractSix # if the 4 isolated bits are greater than 4, jump to subtractSix, if not, continue
+mult $t2, $t3 # multiply result by multiplier
+mflo $t3
+
+add $t3, $t3, $t7 # add the num to result
+sll $t0, $t0, 4 # discard the 4 bits
+addi $t4, $t4, -1 # update counter
+bne $t4, $0, loopAiken
+j endTwo
+
+subtractSix:
+
+addi $t7, $t7, -6 # subtract by 6
+mult $t3, $t2 # multiply result by multiplier
+mflo $t3
+
+add $t3, $t3, $t7 # add the num to result
+sll $t0, $t0, 4 # discard the 4 bits
+addi $t4, $t4, -1 # update counter
+bne $t4, $0, loopAiken
+j endTwo
+
+
+
+endTwo:
+add $t0, $0, $t3 # store result back in t0
+
+############################ Part 2: your code ends here ###
+move $v0, $t0
+jr $ra
+
+###############################################################
+###############################################################
+###############################################################
+#                            PART 3 (Binary to Aiken Code)
+# 
+# You are given a 32-bits integer stored in $t0. This 32-bits
+# present an integer number. You need to convert it to a Aiken.
+# The result must be stored inside $t0 as well.
+.globl bin2aiken
+bin2aiken:
+move $t0, $a0
+############################ Part 3: your code begins here ###
+
+# binary to aiken 
+# divide by 10, keep track of quotient and remainder ; check if remainder > 4, + 6 if so ; remainder shift left by shift amount
+# result = result + remainder ; increment shift amount by 4 ; check if quotient = 0, done if so, else loop again
+
+# two temporary registers to hold result and shift amount
+addi $t1, $0, 0 # result
+addi $t2, $0, 0 # shift amount 
+
+# register to hold 10 for the divisor 
+addi $t3, $0, 10
+
+
+loopBinary:
+
+# divide by 10 and keep track of quotient and remainder
+div $t0, $t3 # t0 / 10
+mflo $t4 # quotient
+mfhi $t5 # remainder
+bgt $t5, 4, addSix # if the remainder is greater than 4, branch to addSix, if not continue
+
+# shift the remainder left by shift amount
+sllv $t5, $t5, $t2
+
+# result = result + remainder
+add $t1, $t1, $t5
+
+# increment shift amount by 4
+addi $t2, $t2, 4
+
+# check if quotient is 0, if so done, else loop again
+beq $t4, $0, endThree
+
+# update quotient to be the new value to be divided by 10
+add $t0, $0, $t4
+
+j loopBinary
+
+addSix:
+
+# add six to remainder before adding
+addi $t5, $t5, 6
+
+# repeat the logic from the loop
+sllv $t5, $t5, $t2
+add $t1, $t1, $t5
+addi $t2, $t2, 4
+add $t0, $0, $t4
+
+j loopBinary
+
+endThree:
+add $t0, $0, $t1 # store result back in t0
+
+
+
+
+
+
+############################ Part 3: your code ends here ###
+move $v0, $t0
+jr $ra
+
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+###############################################################
+
+
+###############################################################
+###############################################################
+###############################################################
+#                           PART 4 (ReadFile)
+#
+# You will read characters (bytes) from a file (lab3_data.dat) 
+# and print them. 
+#Valid characters are defined to be
+# alphanumeric characters (a-z, A-Z, 0-9),
+# " " (space),
+# "." (period),
+# (new line).
+#
+# 
+# Hint: Remember the ascii table. 
+#
+.globl file_read
+file_read:
+############################### Part 4: your code begins here ##
+
+# 2 parts: open file, copy data, close file AND iterate through file, check if each char is valid or not, if valid print, if not omit
+# space: 32, period: 46, newline: 10, a-z: 97-122, A-Z: 65- 90, 1-9: 49-57
+
+
+
+# part 1
+# open file
+li $v0, 13 # system call code for open file
+la $a0, file_name # address of null-terminated string containing filename
+li $a1, 0 # for read-only flag value
+li $a2, 0 # mode is ignored
+syscall
+move $t0, $v0 # t0 is register for file descriptor
+
+# read file
+li $v0, 14 # system call code for read from file
+move $a0, $t0 # file descriptor
+la $a1, read_buffer # address of input buffer
+li $a2, 300 # 300 max characters to read
+syscall
+
+
+
+# part 2
+
+la $t0, read_buffer # prints all unchanged, do first 
+addi $t9, $0, 0 # loop counter
+
+loopRead:
+
+beq $t9, 300, endFour # check if we've reached the char maximum value
+lbu $t1, 0($t0) # read the first char into t1
+
+# logic: if char is valid, proceed to print char, if not jump ahead to later
+# ----------
+
+li $t2, 32 # space 
+beq $t1, $t2, printChar
+
+li $t2, 10 # newline
+beq $t1, $t2, printChar
+
+li $t2, 46 # period
+beq $t1, $t2, printChar 
+
+# addi $t3, $0, 57 # 9
+# addi $t4, $0, 49 # 1
+# bge $t1, $t4, numberCheck # if char is > 49, check if it's < 57
+# j increment
+
+# numberCheck:
+
+# ble $t1, $t3, printChar # check if < 57
+# j increment
+
+# addi $t5, $0, 90 # Z
+# addi $t6, $0, 65 # A
+# bge $t1, $t6, upperCheck # if char is > 65, check if it's < 90
+# j increment
+
+# upperCheck:
+
+# ble $t1, $t5, printChar # check if < 90
+# j increment
+
+# addi $t7, $0, 122 # z
+# addi $t8, $0, 97 # a
+# bge $t1, $t8, lowerCheck # if char is > 97, check if it's < 122
+# j increment
+
+# lowerCheck:
+
+# ble $t1, $t7, printChar # check if < 122
+# j increment
+
+# tried to streamline the logic above, oh well
+
+# 0 - 9
+li $t2, 48
+beq $t1, $t2, printChar
+li $t2, 49
+beq $t1, $t2, printChar
+li $t2, 50
+beq $t1, $t2, printChar
+li $t2, 51
+beq $t1, $t2, printChar
+li $t2, 52
+beq $t1, $t2, printChar
+li $t2, 53
+beq $t1, $t2, printChar
+li $t2, 54
+beq $t1, $t2, printChar
+li $t2, 55
+beq $t1, $t2, printChar
+li $t2, 56
+beq $t1, $t2, printChar
+li $t2, 57
+beq $t1, $t2, printChar
+
+# A - Z
+li $t2, 65
+beq $t1, $t2, printChar
+li $t2, 66
+beq $t1, $t2, printChar
+li $t2, 67
+beq $t1, $t2, printChar
+li $t2, 68
+beq $t1, $t2, printChar
+li $t2, 69
+beq $t1, $t2, printChar
+li $t2, 70
+beq $t1, $t2, printChar
+li $t2, 71
+beq $t1, $t2, printChar
+li $t2, 72
+beq $t1, $t2, printChar
+li $t2, 73
+beq $t1, $t2, printChar
+li $t2, 74
+beq $t1, $t2, printChar
+li $t2, 75
+beq $t1, $t2, printChar
+li $t2, 76
+beq $t1, $t2, printChar
+li $t2, 77
+beq $t1, $t2, printChar
+li $t2, 78
+beq $t1, $t2, printChar
+li $t2, 79
+beq $t1, $t2, printChar
+li $t2, 80
+beq $t1, $t2, printChar
+li $t2, 81
+beq $t1, $t2, printChar
+li $t2, 82
+beq $t1, $t2, printChar
+li $t2, 83
+beq $t1, $t2, printChar
+li $t2, 84
+beq $t1, $t2, printChar
+li $t2, 85
+beq $t1, $t2, printChar
+li $t2, 86
+beq $t1, $t2, printChar
+li $t2, 87
+beq $t1, $t2, printChar
+li $t2, 88
+beq $t1, $t2, printChar
+li $t2, 89
+beq $t1, $t2, printChar
+li $t2, 90
+beq $t1, $t2, printChar
+
+# a - z
+li $t2, 97
+beq $t1, $t2, printChar
+li $t2, 98
+beq $t1, $t2, printChar
+li $t2, 99
+beq $t1, $t2, printChar
+li $t2, 100
+beq $t1, $t2, printChar
+li $t2, 101
+beq $t1, $t2, printChar
+li $t2, 102
+beq $t1, $t2, printChar
+li $t2, 103
+beq $t1, $t2, printChar
+li $t2, 104
+beq $t1, $t2, printChar
+li $t2, 105
+beq $t1, $t2, printChar
+li $t2, 106
+beq $t1, $t2, printChar
+li $t2, 107
+beq $t1, $t2, printChar
+li $t2, 108
+beq $t1, $t2, printChar
+li $t2, 109
+beq $t1, $t2, printChar
+li $t2, 110
+beq $t1, $t2, printChar
+li $t2, 111
+beq $t1, $t2, printChar
+li $t2, 112
+beq $t1, $t2, printChar
+li $t2, 113
+beq $t1, $t2, printChar
+li $t2, 114
+beq $t1, $t2, printChar
+li $t2, 115
+beq $t1, $t2, printChar
+li $t2, 116
+beq $t1, $t2, printChar
+li $t2, 117
+beq $t1, $t2, printChar
+li $t2, 118
+beq $t1, $t2, printChar
+li $t2, 119
+beq $t1, $t2, printChar
+li $t2, 120
+beq $t1, $t2, printChar
+li $t2, 121
+beq $t1, $t2, printChar
+li $t2, 122
+beq $t1, $t2, printChar
+j increment
+
+# ----------
+
+printChar:
+
+# to print character
+li $v0, 11 # system call code for character to print
+move $a0, $t1 # character to print 
+syscall
+j increment
+
+increment:
+
+addi $t9, $t9, 1 # increment counter
+addi $t0, $t0, 1 # move to next
+j loopRead
+
+
+
+endFour:
+
+
+# close file
+li $v0, 16 # system call code for close file
+move $a0, $t0 # file descriptor
+syscall
+
+
+############################### Part 4: your code ends here   ##
+jr $ra
+###############################################################
+###############################################################
+###############################################################
+
+#                          Main Function
+main:
+
+li $v0, 4
+la $a0, student_name
+syscall
+la $a0, new_line
+syscall  
+la $a0, student_id
+syscall 
+la $a0, new_line
+syscall
+la $a0, new_line
+syscall
+##############################################
+##############################################
+test_64bit_Add_Unsigned:
+li $s0, 3
+li $s1, 0
+la $s2, addition_test_data_A
+la $s3, addition_test_data_B
+li $v0, 4
+la $a0, testing_label
+syscall
+la $a0, unsigned_addition_label
+syscall
+##############################################
+test_add:
+add $s4, $s2, $s1
+add $s5, $s3, $s1
+# Pass input parameter
+lw $a0, 0($s4)
+lw $a1, 4($s4)
+lw $a2, 0($s5)
+lw $a3, 4($s5)
+jal Unsigned_Add_64bit
+
+move $s6, $v0
+move $a0, $v1
+jal print_hex
+move $a0, $s6
+jal print_hex
+
+li $v0, 4
+la $a0, space
+syscall
+
+addi $s1, $s1, 8
+addi $s0, $s0, -1
+bgtz $s0, test_add
+
+li $v0, 4
+la $a0, new_line
+syscall
+##############################################
+##############################################
+li $v0, 4
+la $a0, new_line
+syscall
+la $a0, bcd_2_bin_lbl
+syscall
+# Testing part 2
+li $s0, 3 # num of test cases
+li $s1, 0
+la $s2, bcd_2_bin_test_data
+
+test_p2:
+add $s4, $s2, $s1
+# Pass input parameter
+lw $a0, 0($s4)
+jal aiken2bin
+
+move $a0, $v0        # hex to print
+jal print_hex
+
+li $v0, 4
+la $a0, space
+syscall
+
+addi $s1, $s1, 4
+addi $s0, $s0, -1
+bgtz $s0, test_p2
+
+##############################################
+##############################################
+li $v0, 4
+la $a0, new_line
+syscall
+la $a0, bin_2_bcd_lbl
+syscall
+
+# Testing part 3
+li $s0, 3 # num of test cases
+li $s1, 0
+la $s2, bin_2_bcd_test_data
+
+test_p3:
+add $s4, $s2, $s1
+# Pass input parameter
+lw $a0, 0($s4)
+jal bin2aiken
+
+move $a0, $v0        # hex to print
+jal print_hex
+
+li $v0, 4
+la $a0, space
+syscall
+
+addi $s1, $s1, 4
+addi $s0, $s0, -1
+bgtz $s0, test_p3
+##############################################
+##############################################
+li $v0, 4
+la $a0, new_line
+syscall
+test_file_read:
+li $v0, 4
+la $a0, new_line
+syscall
+li $s0, 0
+li $v0, 4
+la $a0, testing_label
+syscall
+la $a0, file_label
+syscall 
+jal file_read
+end:
+# end program
+li $v0, 10
+syscall
