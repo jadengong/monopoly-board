@@ -129,29 +129,29 @@ sdsu_projects/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/build
 .PHONY : sdsu_projects/fast
 
-Ong_Jaden.o: Ong_Jaden.cpp.o
-.PHONY : Ong_Jaden.o
+test.o: test.cpp.o
+.PHONY : test.o
 
 # target to build an object file
-Ong_Jaden.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.o
-.PHONY : Ong_Jaden.cpp.o
+test.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/test.cpp.o
+.PHONY : test.cpp.o
 
-Ong_Jaden.i: Ong_Jaden.cpp.i
-.PHONY : Ong_Jaden.i
+test.i: test.cpp.i
+.PHONY : test.i
 
 # target to preprocess a source file
-Ong_Jaden.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.i
-.PHONY : Ong_Jaden.cpp.i
+test.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/test.cpp.i
+.PHONY : test.cpp.i
 
-Ong_Jaden.s: Ong_Jaden.cpp.s
-.PHONY : Ong_Jaden.s
+test.s: test.cpp.s
+.PHONY : test.s
 
 # target to generate assembly for a file
-Ong_Jaden.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.s
-.PHONY : Ong_Jaden.cpp.s
+test.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/test.cpp.s
+.PHONY : test.cpp.s
 
 # Help Target
 help:
@@ -162,9 +162,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... sdsu_projects"
-	@echo "... Ong_Jaden.o"
-	@echo "... Ong_Jaden.i"
-	@echo "... Ong_Jaden.s"
+	@echo "... test.o"
+	@echo "... test.i"
+	@echo "... test.s"
 .PHONY : help
 
 
