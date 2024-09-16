@@ -69,28 +69,28 @@ include CMakeFiles/sdsu_projects.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/sdsu_projects.dir/flags.make
 
-CMakeFiles/sdsu_projects.dir/test.cpp.o: CMakeFiles/sdsu_projects.dir/flags.make
-CMakeFiles/sdsu_projects.dir/test.cpp.o: /Users/jadenong/Documents/GitHub/sdsu-projects/test.cpp
-CMakeFiles/sdsu_projects.dir/test.cpp.o: CMakeFiles/sdsu_projects.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/sdsu_projects.dir/test.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/sdsu_projects.dir/test.cpp.o -MF CMakeFiles/sdsu_projects.dir/test.cpp.o.d -o CMakeFiles/sdsu_projects.dir/test.cpp.o -c /Users/jadenong/Documents/GitHub/sdsu-projects/test.cpp
+CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.o: CMakeFiles/sdsu_projects.dir/flags.make
+CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.o: /Users/jadenong/Documents/GitHub/sdsu-projects/Ong_Jaden.cpp
+CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.o: CMakeFiles/sdsu_projects.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.o"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.o -MF CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.o.d -o CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.o -c /Users/jadenong/Documents/GitHub/sdsu-projects/Ong_Jaden.cpp
 
-CMakeFiles/sdsu_projects.dir/test.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sdsu_projects.dir/test.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jadenong/Documents/GitHub/sdsu-projects/test.cpp > CMakeFiles/sdsu_projects.dir/test.cpp.i
+CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.i"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/jadenong/Documents/GitHub/sdsu-projects/Ong_Jaden.cpp > CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.i
 
-CMakeFiles/sdsu_projects.dir/test.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sdsu_projects.dir/test.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jadenong/Documents/GitHub/sdsu-projects/test.cpp -o CMakeFiles/sdsu_projects.dir/test.cpp.s
+CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.s"
+	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/jadenong/Documents/GitHub/sdsu-projects/Ong_Jaden.cpp -o CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.s
 
 # Object files for target sdsu_projects
 sdsu_projects_OBJECTS = \
-"CMakeFiles/sdsu_projects.dir/test.cpp.o"
+"CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.o"
 
 # External object files for target sdsu_projects
 sdsu_projects_EXTERNAL_OBJECTS =
 
-sdsu_projects: CMakeFiles/sdsu_projects.dir/test.cpp.o
+sdsu_projects: CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.o
 sdsu_projects: CMakeFiles/sdsu_projects.dir/build.make
 sdsu_projects: CMakeFiles/sdsu_projects.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable sdsu_projects"

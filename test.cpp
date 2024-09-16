@@ -90,6 +90,25 @@ int main() {
 
     // Insert elements at the end
     list.insertAtHead(Student("A", 25));
+    list.insertAtHead(Student("B", 27));
+    list.insertAtHead(Student("C", 12));
+    list.insertAtHead(Student("D", 48));
+    list.insertAtHead(Student("E", 28));
+    list.insertAtHead(Student("F", 9));
+    list.insertAtHead(Student("G", 11));
+    list.insertAtHead(Student("H", 13));
+    list.insertAtHead(Student("I", 99));
+    list.insertAtHead(Student("J", 2));
+    list.insertAtHead(Student("K", 1));
+
+
+
+    list.insertAtTail(Student("L", 111));
+    list.insertAtTail(Student("M", 51));
+    list.insertAtTail(Student("N", 78));
+    list.insertAtTail(Student("O", 155));
+    list.insertAtTail(Student("P", 212));
+
 
     cout << "Linked List after insertions:" << endl;
     list.printList();
