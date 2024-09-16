@@ -63,6 +63,7 @@ CMAKE_BINARY_DIR = /Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-de
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
+all: CMakeFiles/classMain.dir/all
 all: CMakeFiles/sdsu_projects.dir/all
 .PHONY : all
 
@@ -71,8 +72,35 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
+clean: CMakeFiles/classMain.dir/clean
 clean: CMakeFiles/sdsu_projects.dir/clean
 .PHONY : clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/classMain.dir
+
+# All Build rule for target.
+CMakeFiles/classMain.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/classMain.dir/build.make CMakeFiles/classMain.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/classMain.dir/build.make CMakeFiles/classMain.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target classMain"
+.PHONY : CMakeFiles/classMain.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/classMain.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/classMain.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles 0
+.PHONY : CMakeFiles/classMain.dir/rule
+
+# Convenience name for target.
+classMain: CMakeFiles/classMain.dir/rule
+.PHONY : classMain
+
+# clean rule for target.
+CMakeFiles/classMain.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/classMain.dir/build.make CMakeFiles/classMain.dir/clean
+.PHONY : CMakeFiles/classMain.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/sdsu_projects.dir
@@ -81,7 +109,7 @@ clean: CMakeFiles/sdsu_projects.dir/clean
 CMakeFiles/sdsu_projects.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles --progress-num=1,2 "Built target sdsu_projects"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles --progress-num=3,4 "Built target sdsu_projects"
 .PHONY : CMakeFiles/sdsu_projects.dir/all
 
 # Build rule for subdir invocation for target.

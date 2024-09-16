@@ -15,7 +15,8 @@
 					"source" : ".",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1
 					]
 				}
 			],
@@ -30,7 +31,8 @@
 					"name" : "sdsu_projects",
 					"targetIndexes" : 
 					[
-						0
+						0,
+						1
 					]
 				}
 			],
@@ -38,8 +40,15 @@
 			[
 				{
 					"directoryIndex" : 0,
+					"id" : "classMain::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-classMain-Debug-aaa6c3170a175751aac0.json",
+					"name" : "classMain",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
 					"id" : "sdsu_projects::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-sdsu_projects-Debug-44681c3f0537eb068be3.json",
+					"jsonFile" : "target-sdsu_projects-Debug-13ab23aed3684d6ccf56.json",
 					"name" : "sdsu_projects",
 					"projectIndex" : 0
 				}

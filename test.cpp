@@ -100,6 +100,7 @@ int main() {
     list.insertAtHead(Student("I", 99));
     list.insertAtHead(Student("J", 2));
     list.insertAtHead(Student("K", 1));
+    list.insertAtHead(Student("L", 78));
 
 
 
