@@ -18,7 +18,7 @@ public:
         num = n;
     }
 
-    bool isEqual(Student other) {
+    bool isEqual(Student other) { // called in search function
         return (name == other.name && num == other.num);
     }
 
@@ -35,6 +35,7 @@ public:
         data = value;
         nextNode = nullptr;
     }
+
 };
 
 // Template LinkedList class
@@ -45,7 +46,50 @@ private:
 public:
     LinkedList() { headNode = nullptr; }
 
-    // Insert at the head of the list
+    // Delete a node with a specific value -----------------
+    void deleteSpecificNode(T value) {
+        if (headNode == nullptr) {
+            cout << "List is empty. Cannot delete." << endl;
+            return; // EMPTY RETURN is more graceful than a break; preserves call stack
+        }
+
+        // if first node is the value to be deleted. Mark head for deletion
+        if (headNode->data.isEqual(value)) {
+            Node<T>* toDelete = headNode; // mark headNode (first node) before deleting it!
+            headNode = headNode->nextNode; // move the headNode pointer to the next one
+            delete toDelete; // delete the mark (pointer)
+            return;
+        }
+
+
+        // search the list till the end
+        Node<T>* temp = headNode;
+        while (temp->nextNode != nullptr && !temp->nextNode->data.isEqual(value)) { // iterating until we either hit the end or fall one before the one we want to delete
+            temp = temp->nextNode;
+        }
+
+        if (temp->nextNode == nullptr) { // reached the end
+            cout << "Value not found in the list." << endl;
+        } else { // use the pointer to mark the node to delete, reconnect the pointer link and then delete
+            Node<T>* toDelete = temp->nextNode;
+            temp->nextNode = temp->nextNode->nextNode;
+            delete toDelete;
+        }
+    }
+
+    // Search for a node with a specific value -----------------
+    bool search(T value) { // can also be a void search(T value)
+        Node<T>* temp = headNode;
+        while (temp != nullptr) {
+            if (temp->data.isEqual(value)) {
+                return true; // cout << "Element found."
+            }
+            temp = temp->nextNode;
+        }
+        return false; // cout << "Element not found."
+    }
+
+    // Insert at the head of the list -----------------
     void insertAtHead(T value) {
         Node<T> *newNode = new Node<T>(value);
         if (headNode == nullptr) {
@@ -69,9 +113,27 @@ public:
         }
     }
 
-    // Delete a node with a specific value
+    // reverse the list --------------
+    void reverseList() {
+        Node<T>* prev;
+        Node<T>* curr;
+        Node<T>* next;
+        prev = nullptr;
+        curr = headNode;
 
-    // Print the linked list
+        while(curr != nullptr) {
+            next = curr->nextNode;
+            curr->nextNode = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        headNode = prev;
+
+    }
+
+
+    // Print the linked list -----------------
     void printList() {
         Node<T> *temp = headNode;
         while (temp != nullptr) {
@@ -114,6 +176,17 @@ int main() {
 
     cout << "Linked List after insertions:" << endl;
     list.printList();
+
+
+    Student deleteElement("A", 25);
+    list.deleteSpecificNode(deleteElement);
+    cout << "Linked List after deletion of A:" << endl;
+    list.printList();
+
+    list.reverseList();
+    cout << "Linked list after reversal:" << endl;
+    list.printList();
+
 
     return 0;
 }
