@@ -9,6 +9,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/Users/jadenong/Documents/GitHub/sdsu-projects/Ong_Jaden.cpp" "CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.o" "gcc" "CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.o.d"
+  "/Users/jadenong/Desktop/School Downloads/CS210/monopoly_boardMW.cpp" "CMakeFiles/sdsu_projects.dir/Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.cpp.o" "gcc" "CMakeFiles/sdsu_projects.dir/Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.cpp.o.d"
   )
 
 # Targets to which this target links which contain Fortran sources.
