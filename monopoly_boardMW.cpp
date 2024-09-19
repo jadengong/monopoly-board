@@ -13,6 +13,9 @@ public:
 
     // REMINDER: copy paste finalized code on replit and make sure it can run
 
+    MonopolyBoard() : propertyName(""), propertyColor(""), value(0), rent(0) {}
+
+
     MonopolyBoard(string propertyName,string propertyColor,int value, int rent){
        /*Define overloaded constructor here*/
         this->propertyName = propertyName;
@@ -57,11 +60,15 @@ public:
     }
 
 // Core Tasks
-    void insertAtHead() {
+    void insertAtHead(T value) {
 
-
-
-
+        Node<T> *newNode = new Node<T>(value);
+        if(headNode == nullptr) { // if list is empty, set the headNode to be the newNode
+            headNode = newNode;
+        }else { // otherwise ...
+            newNode->nextNode = headNode; // set the newNode's next pointer at the current first node of the list
+            headNode = newNode; // after linking newNode to the list, update headNode to be this newNode
+        }
 
       cout<<"Insert at head unwritten"<<endl;
     }
@@ -93,6 +100,13 @@ public:
           cout<<"Search unwritten"<<endl;
     }
     void printList() {
+        Node<T> *temp = headNode;
+        while(temp != nullptr) {
+            temp->data.print();
+            cout << " -> ";
+            temp = temp->nextNode;
+        }
+        cout << "END" << endl;
         cout << "Print List unwritten" << endl;
     }
 
@@ -133,7 +147,7 @@ int main() {
     CircularLinkedList<MonopolyBoard> list;
 
     // Insert elements at the end
-    list.insertAtHead();
+    list.insertAtHead(MonopolyBoard("Boardwalk", "Dark Blue", 400, 50));
 
     list.insertAtTail();
 
