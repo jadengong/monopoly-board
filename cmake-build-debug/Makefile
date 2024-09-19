@@ -142,53 +142,29 @@ sdsu_projects/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/build
 .PHONY : sdsu_projects/fast
 
-Ong_Jaden.o: Ong_Jaden.cpp.o
-.PHONY : Ong_Jaden.o
+monopoly_boardMW.o: monopoly_boardMW.cpp.o
+.PHONY : monopoly_boardMW.o
 
 # target to build an object file
-Ong_Jaden.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.o
-.PHONY : Ong_Jaden.cpp.o
+monopoly_boardMW.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/monopoly_boardMW.cpp.o
+.PHONY : monopoly_boardMW.cpp.o
 
-Ong_Jaden.i: Ong_Jaden.cpp.i
-.PHONY : Ong_Jaden.i
-
-# target to preprocess a source file
-Ong_Jaden.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.i
-.PHONY : Ong_Jaden.cpp.i
-
-Ong_Jaden.s: Ong_Jaden.cpp.s
-.PHONY : Ong_Jaden.s
-
-# target to generate assembly for a file
-Ong_Jaden.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/Ong_Jaden.cpp.s
-.PHONY : Ong_Jaden.cpp.s
-
-Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.o: Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.cpp.o
-.PHONY : Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.o
-
-# target to build an object file
-Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.cpp.o
-.PHONY : Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.cpp.o
-
-Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.i: Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.cpp.i
-.PHONY : Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.i
+monopoly_boardMW.i: monopoly_boardMW.cpp.i
+.PHONY : monopoly_boardMW.i
 
 # target to preprocess a source file
-Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.cpp.i
-.PHONY : Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.cpp.i
+monopoly_boardMW.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/monopoly_boardMW.cpp.i
+.PHONY : monopoly_boardMW.cpp.i
 
-Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.s: Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.cpp.s
-.PHONY : Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.s
+monopoly_boardMW.s: monopoly_boardMW.cpp.s
+.PHONY : monopoly_boardMW.s
 
 # target to generate assembly for a file
-Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.cpp.s
-.PHONY : Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.cpp.s
+monopoly_boardMW.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/monopoly_boardMW.cpp.s
+.PHONY : monopoly_boardMW.cpp.s
 
 test.o: test.cpp.o
 .PHONY : test.o
@@ -224,12 +200,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... classMain"
 	@echo "... sdsu_projects"
-	@echo "... Ong_Jaden.o"
-	@echo "... Ong_Jaden.i"
-	@echo "... Ong_Jaden.s"
-	@echo "... Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.o"
-	@echo "... Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.i"
-	@echo "... Users/jadenong/Desktop/School_Downloads/CS210/monopoly_boardMW.s"
+	@echo "... monopoly_boardMW.o"
+	@echo "... monopoly_boardMW.i"
+	@echo "... monopoly_boardMW.s"
 	@echo "... test.o"
 	@echo "... test.i"
 	@echo "... test.s"

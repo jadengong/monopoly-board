@@ -11,21 +11,26 @@ public:
     int value;
     int rent;
 
+    // REMINDER: copy paste finalized code on replit and make sure it can run
 
-
-    //test test 
     MonopolyBoard(string propertyName,string propertyColor,int value, int rent){
        /*Define overloaded constructor here*/
+        this->propertyName = propertyName;
+        this->propertyColor = propertyColor;
+        this->value = value;
+        this->rent = rent;
+
     }
 
 
     bool isEqual(MonopolyBoard other) {
-      /*Define is equal here*/
+        /*Define is equal here*/
+        return (propertyName == other.propertyName && propertyColor == other.propertyColor && value == other.value && rent == other.rent);
     }
 
-
     void print() {
-       /*Define Print Here*/
+        /*Define Print Here*/
+        cout << "test" << endl;
     }
 };
 

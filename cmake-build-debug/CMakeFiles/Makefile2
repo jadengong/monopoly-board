@@ -109,12 +109,12 @@ CMakeFiles/classMain.dir/clean:
 CMakeFiles/sdsu_projects.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/sdsu_projects.dir/build.make CMakeFiles/sdsu_projects.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles --progress-num=3,4,5 "Built target sdsu_projects"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles --progress-num=3,4 "Built target sdsu_projects"
 .PHONY : CMakeFiles/sdsu_projects.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/sdsu_projects.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles 3
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/sdsu_projects.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/sdsu_projects.dir/rule
