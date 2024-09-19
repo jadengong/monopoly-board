@@ -30,7 +30,7 @@ public:
 
     void print() {
         /*Define Print Here*/
-        cout << "test" << endl;
+        cout << "(" << propertyName << ", " << propertyColor << ", " << value << ", " << rent << ")" << endl;
     }
 };
 
@@ -58,6 +58,11 @@ public:
 
 // Core Tasks
     void insertAtHead() {
+
+
+
+
+
       cout<<"Insert at head unwritten"<<endl;
     }
 

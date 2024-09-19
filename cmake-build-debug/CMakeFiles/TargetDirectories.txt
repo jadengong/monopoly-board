@@ -1,4 +1,4 @@
-/Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles/classMain.dir
-/Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles/sdsu_projects.dir
-/Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles/edit_cache.dir
-/Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Code/projects/sdsu-projects/cmake-build-debug/CMakeFiles/classMain.dir
+C:/Code/projects/sdsu-projects/cmake-build-debug/CMakeFiles/sdsu_projects.dir
+C:/Code/projects/sdsu-projects/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Code/projects/sdsu-projects/cmake-build-debug/CMakeFiles/rebuild_cache.dir
