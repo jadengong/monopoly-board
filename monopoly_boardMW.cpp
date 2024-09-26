@@ -57,12 +57,11 @@ private:
 
 public:
     CircularLinkedList() {
-        size = 0;;
+        size = 0;
     headNode = nullptr;
     }
 
-    // do while for traversing ciruclar linked list
-    // pointer for new node
+
 
 
 // Core Tasks
@@ -71,24 +70,27 @@ public:
         Node<T> *newNode = new Node<T>(value);
         if(headNode == nullptr) { // if list is empty, set the headNode to be the newNode
             headNode = newNode;
-        }else { // otherwise ...
+            newNode->nextNode = headNode;
+        }else {
+            Node<T> *temp = headNode;
+            while(temp->nextNode != headNode) {
+                temp = temp->nextNode;
+            }
             newNode->nextNode = headNode; // set the newNode's next pointer at the current first node of the list
+            temp->nextNode = newNode;
             headNode = newNode; // after linking newNode to the list, update headNode to be this newNode
         }
 
         ++size;
-
-
-
     }
 
 
     void insertAtTail(T value) {
 
         Node<T> *newNode = new Node<T>(value);
+
         if(headNode == nullptr) {
             headNode = newNode; // if empty, just enter
-            headNode->nextNode = headNode; // point to self for circularity
         } else {
             Node<T> *temp = headNode; // use a pointer and traverse until next is the end
             while(temp->nextNode != nullptr) {
@@ -108,21 +110,31 @@ public:
 
         Node<T> *newNode = new Node<T>(value);
 
-        if(headNode == nullptr) { // as always, if list is empty, just enter
-            headNode = newNode;
-        }
-
         if(position == 0) {
             insertAtHead(value); // save some lines by calling our insert at head
-        }else {
-            Node<T> *temp = headNode; // using a pointer until we reach position desired
-            while(temp != nullptr && index < position - 1) { // iterate until spot before desired position
-                temp = temp->nextNode;
-                ++index;
-            }
-            // insert newNode with the value at position
-            temp->nextNode = newNode;
+            return;
         }
+
+        if(position > size || position < 0) {
+            throw out_of_range("Position out of range");
+        }
+
+        if(headNode == nullptr) { // as always, if list is empty, just enter
+            headNode = newNode;
+            newNode->nextNode = headNode; // point to self for circularity
+            ++size;
+            return;
+        }
+
+        Node<T> *temp = headNode; // using a pointer until we reach position desired
+
+       while(temp->nextNode != headNode && index < position - 1) {
+           temp = temp->nextNode;
+           index++;
+       }
+
+        newNode->nextNode = temp->nextNode; // pointing newnode to next node
+        temp->nextNode = newNode; // pointing previous node to new node
 
         ++size;
 
@@ -213,11 +225,12 @@ public:
         }
     }
 
-    void printList() {
+    void printList() { // loop the circular list from head to tail, and then loop back to the head
         Node<T> *temp = headNode;
 
         if(temp == nullptr) {
             cout << "List is empty." << endl;
+            return;
         }
 
         do {
@@ -229,6 +242,8 @@ public:
             }
 
         } while(temp != headNode);
+
+
 
         cout << "Head" << endl;
 
@@ -253,7 +268,21 @@ public:
         //do while loop while temp != headNode
         //return count
 
-        cout << "Count Nodes unwritten" << endl;
+        if(headNode == nullptr) {
+            cout << "List is empty." << endl;
+            return;
+        }
+
+        Node<T> *temp = headNode;
+        int count = 0; // for the head
+
+        do {
+            temp = temp->nextNode;
+            count++;
+        }while(temp != headNode);
+
+        cout << "Total count of nodes is: " << count << endl;
+
     }
 
     //Optional Tasks
@@ -278,28 +307,30 @@ int main() {
 
     // Insert elements at the end
     list.insertAtHead(MonopolyBoard("Mediterranean Avenue", "Brown", 60, 2));
-    list.insertAtTail(MonopolyBoard("Park Place", "Dark Blue", 400, 50));
+    // list.insertAtHead(MonopolyBoard("Test Avenue", "Brown", 60, 2));
 
-    list.insertAtPosition(MonopolyBoard("Baltic Avenue", "Brown", 60, 50), 1);
-    list.insertAtPosition(MonopolyBoard("Oriental Avenue", "Light Blue", 100, 6), 2);
-    list.insertAtPosition(MonopolyBoard("Vermont Avenue", "Light Blue", 100, 6), 3);
-    list.insertAtPosition(MonopolyBoard("Connecticut Avenue", "Light Blue", 100, 6), 4);
-    list.insertAtPosition(MonopolyBoard("St. Charles Place", "Pink", 140, 10), 5);
-    list.insertAtPosition(MonopolyBoard("States Avenue", "Pink", 140, 10), 6);
-    list.insertAtPosition(MonopolyBoard("Virginia Avenue", "Pink", 140, 10), 7);
-    list.insertAtPosition(MonopolyBoard("St. James Place", "Orange", 180, 14), 8);
-    list.insertAtPosition(MonopolyBoard("Tennessee Avenue", "Orange", 180, 14), 9);
-    list.insertAtPosition(MonopolyBoard("New York Avenue", "Orange", 180, 14), 10);
-    list.insertAtPosition(MonopolyBoard("Kentucky Avenue", "Red", 220, 18), 11);
-    list.insertAtPosition(MonopolyBoard("Indiana Avenue", "Red", 220, 18), 12);
-    list.insertAtPosition(MonopolyBoard("Illinois Avenue", "Red", 220, 18), 13);
-    list.insertAtPosition(MonopolyBoard("Atlantic Avenue", "Yellow", 260, 22), 14);
-    list.insertAtPosition(MonopolyBoard("Ventnor Avenue", "Yellow", 260, 22), 15);
-    list.insertAtPosition(MonopolyBoard("Marvin Gardens", "Yellow", 260, 22), 16);
-    list.insertAtPosition(MonopolyBoard("Pacific Avenue", "Green", 300, 26), 17);
-    list.insertAtPosition(MonopolyBoard("North Carolina Avenue", "Green", 300, 26), 18);
-    list.insertAtPosition(MonopolyBoard("Pennsylvania Avenue", "Green", 300, 26), 19);
-    list.insertAtPosition(MonopolyBoard("Boardwalk", "Dark Blue", 400, 50), 20);
+    // list.insertAtTail(MonopolyBoard("Park Place", "Dark Blue", 400, 50));
+
+    // list.insertAtPosition(MonopolyBoard("Baltic Avenue", "Brown", 60, 2), 1);
+    // list.insertAtPosition(MonopolyBoard("Oriental Avenue", "Light Blue", 100, 6), 2);
+    // list.insertAtPosition(MonopolyBoard("Vermont Avenue", "Light Blue", 100, 6), 3);
+    // list.insertAtPosition(MonopolyBoard("Connecticut Avenue", "Light Blue", 100, 6), 4);
+    // list.insertAtPosition(MonopolyBoard("St. Charles Place", "Pink", 140, 10), 5);
+    // list.insertAtPosition(MonopolyBoard("States Avenue", "Pink", 140, 10), 6);
+    // list.insertAtPosition(MonopolyBoard("Virginia Avenue", "Pink", 140, 10), 7);
+    // list.insertAtPosition(MonopolyBoard("St. James Place", "Orange", 180, 14), 8);
+    // list.insertAtPosition(MonopolyBoard("Tennessee Avenue", "Orange", 180, 14), 9);
+    // list.insertAtPosition(MonopolyBoard("New York Avenue", "Orange", 180, 14), 10);
+    // list.insertAtPosition(MonopolyBoard("Kentucky Avenue", "Red", 220, 18), 11);
+    // list.insertAtPosition(MonopolyBoard("Indiana Avenue", "Red", 220, 18), 12);
+    // list.insertAtPosition(MonopolyBoard("Illinois Avenue", "Red", 220, 18), 13);
+    // list.insertAtPosition(MonopolyBoard("Atlantic Avenue", "Yellow", 260, 22), 14);
+    // list.insertAtPosition(MonopolyBoard("Ventnor Avenue", "Yellow", 260, 22), 15);
+    // list.insertAtPosition(MonopolyBoard("Marvin Gardens", "Yellow", 260, 22), 16);
+    // list.insertAtPosition(MonopolyBoard("Pacific Avenue", "Green", 300, 26), 17);
+    // list.insertAtPosition(MonopolyBoard("North Carolina Avenue", "Green", 300, 26), 18);
+    // list.insertAtPosition(MonopolyBoard("Pennsylvania Avenue", "Green", 300, 26), 19);
+    // list.insertAtPosition(MonopolyBoard("Boardwalk", "Dark Blue", 400, 50), 20);
 
 
 
@@ -323,9 +354,9 @@ int main() {
      // list.printHeadNode();
      // list.printLastNode();
     // list.isListEmpty();
-    // list.countNodes();
+     list.countNodes();
 
-    list.printList();
+    // list.printList();
 
     // //Optional Level 2 Tasks
     // list.convertCLList();
