@@ -66,8 +66,8 @@ public:
 
 // Core Tasks
     void insertAtHead(T value) {
-
         Node<T> *newNode = new Node<T>(value);
+
         if(headNode == nullptr) { // if list is empty, set the headNode to be the newNode
             headNode = newNode;
             newNode->nextNode = headNode;
@@ -86,17 +86,18 @@ public:
 
 
     void insertAtTail(T value) {
-
         Node<T> *newNode = new Node<T>(value);
 
         if(headNode == nullptr) {
             headNode = newNode; // if empty, just enter
+            newNode->nextNode = headNode;
         } else {
             Node<T> *temp = headNode; // use a pointer and traverse until next is the end
-            while(temp->nextNode != nullptr) {
+            while(temp->nextNode != headNode) {
                 temp = temp->nextNode;
             }
             temp->nextNode = newNode;
+
             newNode->nextNode = headNode;
         }
 
@@ -245,7 +246,7 @@ public:
 
 
 
-        cout << "Head" << endl;
+
 
     }
 
@@ -305,44 +306,38 @@ int main() {
     CircularLinkedList<MonopolyBoard> list;
 
 
-    // Insert elements at the end
+    // Insert elements
     list.insertAtHead(MonopolyBoard("Mediterranean Avenue", "Brown", 60, 2));
-    // list.insertAtHead(MonopolyBoard("Test Avenue", "Brown", 60, 2));
 
-    // list.insertAtTail(MonopolyBoard("Park Place", "Dark Blue", 400, 50));
+    list.insertAtTail(MonopolyBoard("Park Place", "Dark Blue", 400, 50));
 
-    // list.insertAtPosition(MonopolyBoard("Baltic Avenue", "Brown", 60, 2), 1);
-    // list.insertAtPosition(MonopolyBoard("Oriental Avenue", "Light Blue", 100, 6), 2);
-    // list.insertAtPosition(MonopolyBoard("Vermont Avenue", "Light Blue", 100, 6), 3);
-    // list.insertAtPosition(MonopolyBoard("Connecticut Avenue", "Light Blue", 100, 6), 4);
-    // list.insertAtPosition(MonopolyBoard("St. Charles Place", "Pink", 140, 10), 5);
-    // list.insertAtPosition(MonopolyBoard("States Avenue", "Pink", 140, 10), 6);
-    // list.insertAtPosition(MonopolyBoard("Virginia Avenue", "Pink", 140, 10), 7);
-    // list.insertAtPosition(MonopolyBoard("St. James Place", "Orange", 180, 14), 8);
-    // list.insertAtPosition(MonopolyBoard("Tennessee Avenue", "Orange", 180, 14), 9);
-    // list.insertAtPosition(MonopolyBoard("New York Avenue", "Orange", 180, 14), 10);
-    // list.insertAtPosition(MonopolyBoard("Kentucky Avenue", "Red", 220, 18), 11);
-    // list.insertAtPosition(MonopolyBoard("Indiana Avenue", "Red", 220, 18), 12);
-    // list.insertAtPosition(MonopolyBoard("Illinois Avenue", "Red", 220, 18), 13);
-    // list.insertAtPosition(MonopolyBoard("Atlantic Avenue", "Yellow", 260, 22), 14);
-    // list.insertAtPosition(MonopolyBoard("Ventnor Avenue", "Yellow", 260, 22), 15);
-    // list.insertAtPosition(MonopolyBoard("Marvin Gardens", "Yellow", 260, 22), 16);
-    // list.insertAtPosition(MonopolyBoard("Pacific Avenue", "Green", 300, 26), 17);
-    // list.insertAtPosition(MonopolyBoard("North Carolina Avenue", "Green", 300, 26), 18);
-    // list.insertAtPosition(MonopolyBoard("Pennsylvania Avenue", "Green", 300, 26), 19);
-    // list.insertAtPosition(MonopolyBoard("Boardwalk", "Dark Blue", 400, 50), 20);
-
-
-
-    //
-    //
-    //
+    list.insertAtPosition(MonopolyBoard("Baltic Avenue", "Brown", 60, 2), 1);
+    list.insertAtPosition(MonopolyBoard("Oriental Avenue", "Light Blue", 100, 6), 2);
+    list.insertAtPosition(MonopolyBoard("Vermont Avenue", "Light Blue", 100, 6), 3);
+    list.insertAtPosition(MonopolyBoard("Connecticut Avenue", "Light Blue", 100, 6), 4);
+    list.insertAtPosition(MonopolyBoard("St. Charles Place", "Pink", 140, 10), 5);
+    list.insertAtPosition(MonopolyBoard("States Avenue", "Pink", 140, 10), 6);
+    list.insertAtPosition(MonopolyBoard("Virginia Avenue", "Pink", 140, 10), 7);
+    list.insertAtPosition(MonopolyBoard("St. James Place", "Orange", 180, 14), 8);
+    list.insertAtPosition(MonopolyBoard("Tennessee Avenue", "Orange", 180, 14), 9);
+    list.insertAtPosition(MonopolyBoard("New York Avenue", "Orange", 180, 14), 10);
+    list.insertAtPosition(MonopolyBoard("Kentucky Avenue", "Red", 220, 18), 11);
+    list.insertAtPosition(MonopolyBoard("Indiana Avenue", "Red", 220, 18), 12);
+    list.insertAtPosition(MonopolyBoard("Illinois Avenue", "Red", 220, 18), 13);
+    list.insertAtPosition(MonopolyBoard("Atlantic Avenue", "Yellow", 260, 22), 14);
+    list.insertAtPosition(MonopolyBoard("Ventnor Avenue", "Yellow", 260, 22), 15);
+    list.insertAtPosition(MonopolyBoard("Marvin Gardens", "Yellow", 260, 22), 16);
+    list.insertAtPosition(MonopolyBoard("Pacific Avenue", "Green", 300, 26), 17);
+    list.insertAtPosition(MonopolyBoard("North Carolina Avenue", "Green", 300, 26), 18);
+    list.insertAtPosition(MonopolyBoard("Pennsylvania Avenue", "Green", 300, 26), 19);
+    list.insertAtPosition(MonopolyBoard("Boardwalk", "Dark Blue", 400, 50), 20);
 
 
 
-    // list.deleteAtHead();
-    //
-    // list.deleteAtTail();
+
+    list.deleteAtHead();
+
+    list.deleteAtTail();
 
     // list.deleteAtPosition(MonopolyBoard("Mayfair", "Dark Blue", 400, 50), 1);
 
@@ -356,7 +351,7 @@ int main() {
     // list.isListEmpty();
      list.countNodes();
 
-    // list.printList();
+    list.printList();
 
     // //Optional Level 2 Tasks
     // list.convertCLList();
