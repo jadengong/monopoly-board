@@ -53,10 +53,11 @@ public:
 template <typename T> class CircularLinkedList {
 private:
     Node<T>* headNode;
+    int size;
 
 public:
     CircularLinkedList() {
-        int size = 0;
+        size = 0;;
     headNode = nullptr;
     }
 
@@ -75,8 +76,9 @@ public:
             headNode = newNode; // after linking newNode to the list, update headNode to be this newNode
         }
 
-        size++;
-      cout<<"Insert at head unwritten"<<endl;
+        ++size;
+
+
 
     }
 
@@ -94,27 +96,33 @@ public:
             temp->nextNode = newNode;
         }
 
-        size++;
-        cout<<"Insert at Tail unwritten"<<endl;
+        ++size;
+
+
     }
 
     void insertAtPosition(T value, int position) {
+        int index = 0; // using index makes sure we stop one node before
 
         Node<T> *newNode = new Node<T>(value);
+
         if(headNode == nullptr) { // as always, if list is empty, just enter
             headNode = newNode;
-        } else {
+        } else if(position == 0) {
+            insertAtHead(value); // save some lines by calling our insert at head
+        }else {
             Node<T> *temp = headNode; // using a pointer until we reach position desired
-            while(temp->nextNode != position) { // iterate until we reach position wanted
+            while(temp != nullptr && index < position - 1) { // iterate until spot before desired position
                 temp = temp->nextNode;
+                ++index;
             }
             // insert newNode with the value at position
             temp->nextNode = newNode;
         }
-        size++;
+
+        ++size;
 
 
-        cout<<"Insert at Position unwritten"<<endl;
     }
 
 
@@ -131,8 +139,9 @@ public:
         headNode = headNode->nextNode; // moving headNode pointer to next
         delete toDelete;
 
+        --size;
 
-        cout<<"Delete at head unwritten"<<endl;
+
     }
 
 
@@ -148,7 +157,7 @@ public:
         // must iterate to get there first
 
         Node<T> *temp = headNode;
-        while(temp->nextNode != nullptr && !temp->nextNode->nextNode == nullptr) { // added check if list hasn't reached end to be safe, could probably remove
+        while(temp->nextNode != nullptr && temp->nextNode->nextNode != nullptr) { // added check if list hasn't reached end to be safe, could probably remove
             temp = temp->nextNode;
         }
 
@@ -156,45 +165,61 @@ public:
         temp->nextNode = toDelete->nextNode;
         delete toDelete;
 
-        cout<<"Delete at Tail unwritten"<<endl;
+        size--;
+
+
     }
 
-    void deleteAtPosition(T value, T position) {
+    void deleteAtPosition(T value, int position) {
+        int index = 0;
 
         if(headNode == nullptr) { // all three methods will have a check for an empty list
             cout << "List is empty, can't delete at position: " << position << endl;
             return;
+        }else if(position == 0) {
+            deleteAtHead();
+        }else {
+            Node<T> *temp = headNode;
+            while(temp->nextNode != nullptr && index < position - 1) { // iterate if haven't reached the end and if haven't reached our position
+                temp = temp->nextNode;
+                ++index;
+            }
+            if(temp->nextNode == nullptr) { // the end
+                cout << "Reached end of list, position entered not possible" << endl;
+            } else { // found
+                Node<T> *toDelete = temp->nextNode; // mark for deletion
+                temp->nextNode = temp->nextNode->nextNode; // connect prev to next
+                delete toDelete;
+            }
         }
-
-        Node<T> *temp = headNode;
-        while(temp->nextNode != nullptr && !temp->nextNode.isEqual(position)) { // iterate if haven't reached the end and if haven't reached our position
-            temp = temp->nextNode;
-        }
-
-        if(temp->nextNode == nullptr) { // the end
-            cout << "Reached end of list, position entered not possible" << endl;
-        } else { // found
-            Node<T> *toDelete = temp->nextNode; // mark for deletion
-            temp->nextNode = temp->nextNode->nextNode; // connect prev to next
-            delete toDelete;
-        }
-        cout<<"Delete at Position unwritten"<<endl;
+        size--;
     }
 
 
     void search(T value) {
+        Node<T> *temp = headNode;
+        while(temp != nullptr) {
+            if(temp->data.isEqual(value)) {
+                cout << "Property: " << temp->data << endl;
+                cout << "Value: " << temp->data << endl;
+            }
 
-          cout<<"Search unwritten"<<endl;
+        }
     }
+
     void printList() {
         Node<T> *temp = headNode;
+
+        if(temp == nullptr) {
+            cout << "List is empty." << endl;
+        }
         while(temp != nullptr) {
             temp->data.print();
             cout << " -> ";
             temp = temp->nextNode;
         }
         cout << "END" << endl;
-        cout << "Print List unwritten" << endl;
+
     }
 
     //Optional Tasks
@@ -238,21 +263,24 @@ int main() {
     // Create a LinkedList of Data objects
     CircularLinkedList<MonopolyBoard> list;
 
+
     // Insert elements at the end
     list.insertAtHead(MonopolyBoard("Boardwalk", "Dark Blue", 400, 50));
 
     list.insertAtTail(MonopolyBoard("Mayfair", "Dark Blue", 400, 50));
 
-    list.deleteAtHead();
-    list.deleteAtTail();
 
-    list.insertAtPosition(MonopolyBoard("Kentucky Avenue", "Red", 220, 18), 5);
+
+
+
+    list.insertAtPosition(MonopolyBoard("Kentucky Avenue", "Red", 220, 18), 2);
 
     // list.deleteAtHead();
     //
     // list.deleteAtTail();
 
-    // list.deleteAtPosition();
+    list.deleteAtPosition(MonopolyBoard("Mayfair", "Dark Blue", 400, 50), 1);
+
 
     //Optional Level 1 Tasks
 
