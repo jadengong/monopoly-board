@@ -210,12 +210,14 @@ public:
             deleteAtHead();
         }else {
             Node<T> *temp = headNode;
-            while(temp->nextNode != nullptr && index < position - 1) { // iterate if haven't reached the end and if haven't reached our position
+            while(temp->nextNode != headNode && index < position - 1) { // iterate if haven't reached the end and if haven't reached our position
                 temp = temp->nextNode;
                 ++index;
             }
-            if(temp->nextNode == nullptr) { // the end
-                cout << "Reached end of list, position entered not possible" << endl;
+            if(index != position - 1|| temp->nextNode == headNode) { // the end
+                cout << "Position is not valid" << endl;
+                
+
             } else { // found
                 Node<T> *toDelete = temp->nextNode; // mark for deletion
                 temp->nextNode = temp->nextNode->nextNode; // connect prev to next
@@ -346,10 +348,10 @@ int main() {
 
 
 
-    list.deleteAtHead();
-    list.deleteAtTail();
+    // list.deleteAtHead();
+    // list.deleteAtTail();
 
-    // list.deleteAtPosition(MonopolyBoard("Mayfair", "Dark Blue", 400, 50), 1);
+    list.deleteAtPosition(MonopolyBoard(), 222);
 
 
     //Optional Level 1 Tasks
