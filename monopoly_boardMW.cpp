@@ -33,7 +33,7 @@ public:
 
     void print() {
         /*Define Print Here*/
-        cout << "(" << propertyName << ", " << propertyColor << ", " << value << ", " << rent << ")" << endl;
+        cout << "(Name: " << propertyName << ", Color: " << propertyColor << ", Value: " << value << ", Rent: " << rent << ")" << endl;
     }
 };
 
@@ -88,12 +88,14 @@ public:
         Node<T> *newNode = new Node<T>(value);
         if(headNode == nullptr) {
             headNode = newNode; // if empty, just enter
+            headNode->nextNode = headNode; // point to self for circularity
         } else {
             Node<T> *temp = headNode; // use a pointer and traverse until next is the end
             while(temp->nextNode != nullptr) {
                 temp = temp->nextNode;
             }
             temp->nextNode = newNode;
+            newNode->nextNode = headNode;
         }
 
         ++size;
@@ -108,7 +110,9 @@ public:
 
         if(headNode == nullptr) { // as always, if list is empty, just enter
             headNode = newNode;
-        } else if(position == 0) {
+        }
+
+        if(position == 0) {
             insertAtHead(value); // save some lines by calling our insert at head
         }else {
             Node<T> *temp = headNode; // using a pointer until we reach position desired
@@ -176,7 +180,9 @@ public:
         if(headNode == nullptr) { // all three methods will have a check for an empty list
             cout << "List is empty, can't delete at position: " << position << endl;
             return;
-        }else if(position == 0) {
+        }
+
+        if(position == 0) {
             deleteAtHead();
         }else {
             Node<T> *temp = headNode;
@@ -213,12 +219,18 @@ public:
         if(temp == nullptr) {
             cout << "List is empty." << endl;
         }
-        while(temp != nullptr) {
+
+        do {
             temp->data.print();
-            cout << " -> ";
             temp = temp->nextNode;
-        }
-        cout << "END" << endl;
+
+            if(temp != headNode) {
+                cout << " -> ";
+            }
+
+        } while(temp != headNode);
+
+        cout << "Head" << endl;
 
     }
 
@@ -265,21 +277,43 @@ int main() {
 
 
     // Insert elements at the end
-    list.insertAtHead(MonopolyBoard("Boardwalk", "Dark Blue", 400, 50));
+    list.insertAtHead(MonopolyBoard("Mediterranean Avenue", "Brown", 60, 2));
+    list.insertAtTail(MonopolyBoard("Park Place", "Dark Blue", 400, 50));
 
-    list.insertAtTail(MonopolyBoard("Mayfair", "Dark Blue", 400, 50));
+    list.insertAtPosition(MonopolyBoard("Baltic Avenue", "Brown", 60, 50), 1);
+    list.insertAtPosition(MonopolyBoard("Oriental Avenue", "Light Blue", 100, 6), 2);
+    list.insertAtPosition(MonopolyBoard("Vermont Avenue", "Light Blue", 100, 6), 3);
+    list.insertAtPosition(MonopolyBoard("Connecticut Avenue", "Light Blue", 100, 6), 4);
+    list.insertAtPosition(MonopolyBoard("St. Charles Place", "Pink", 140, 10), 5);
+    list.insertAtPosition(MonopolyBoard("States Avenue", "Pink", 140, 10), 6);
+    list.insertAtPosition(MonopolyBoard("Virginia Avenue", "Pink", 140, 10), 7);
+    list.insertAtPosition(MonopolyBoard("St. James Place", "Orange", 180, 14), 8);
+    list.insertAtPosition(MonopolyBoard("Tennessee Avenue", "Orange", 180, 14), 9);
+    list.insertAtPosition(MonopolyBoard("New York Avenue", "Orange", 180, 14), 10);
+    list.insertAtPosition(MonopolyBoard("Kentucky Avenue", "Red", 220, 18), 11);
+    list.insertAtPosition(MonopolyBoard("Indiana Avenue", "Red", 220, 18), 12);
+    list.insertAtPosition(MonopolyBoard("Illinois Avenue", "Red", 220, 18), 13);
+    list.insertAtPosition(MonopolyBoard("Atlantic Avenue", "Yellow", 260, 22), 14);
+    list.insertAtPosition(MonopolyBoard("Ventnor Avenue", "Yellow", 260, 22), 15);
+    list.insertAtPosition(MonopolyBoard("Marvin Gardens", "Yellow", 260, 22), 16);
+    list.insertAtPosition(MonopolyBoard("Pacific Avenue", "Green", 300, 26), 17);
+    list.insertAtPosition(MonopolyBoard("North Carolina Avenue", "Green", 300, 26), 18);
+    list.insertAtPosition(MonopolyBoard("Pennsylvania Avenue", "Green", 300, 26), 19);
+    list.insertAtPosition(MonopolyBoard("Boardwalk", "Dark Blue", 400, 50), 20);
 
 
 
+    //
+    //
+    //
 
 
-    list.insertAtPosition(MonopolyBoard("Kentucky Avenue", "Red", 220, 18), 2);
 
     // list.deleteAtHead();
     //
     // list.deleteAtTail();
 
-    list.deleteAtPosition(MonopolyBoard("Mayfair", "Dark Blue", 400, 50), 1);
+    // list.deleteAtPosition(MonopolyBoard("Mayfair", "Dark Blue", 400, 50), 1);
 
 
     //Optional Level 1 Tasks
