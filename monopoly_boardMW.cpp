@@ -96,9 +96,9 @@ public:
             while(temp->nextNode != headNode) {
                 temp = temp->nextNode;
             }
-            temp->nextNode = newNode;
+            temp->nextNode = newNode; // set last's next node to be the new node
 
-            newNode->nextNode = headNode;
+            newNode->nextNode = headNode; // circularize
         }
 
         ++size;
@@ -150,15 +150,25 @@ public:
             return;
         }
 
-        // deleting at the head doesn't require a T value input or an if-statement other than if the list is empty:
+        // if one node
+        if(headNode->nextNode == headNode) {
+            delete headNode;
+            headNode = nullptr;
+        } else { // must traverse to last node (pointing to the head)
+            Node<T> *temp = headNode;
 
-        Node<T> *toDelete = headNode; // mark first node first
-        headNode = headNode->nextNode; // moving headNode pointer to next
-        delete toDelete;
+            while(temp->nextNode != headNode) {
+                temp = temp->nextNode;
+            }
 
+            Node<T> *toDelete = headNode;
+            headNode = headNode->nextNode;
+            temp->nextNode = headNode; // last's nextnode to be the new headnode
+
+            delete toDelete;
+
+        }
         --size;
-
-
     }
 
 
@@ -169,22 +179,23 @@ public:
             return;
         }
 
-        // deleting at the tail doesn't require a T value input or an if-statement other than if the list is empty: we can set the marker for delete to be the one previous from the tail
+        // if one node
+        if(headNode->nextNode == headNode) {
+            delete headNode;
+            headNode = nullptr;
+        } else {
+            Node<T> *temp = headNode;
 
-        // must iterate to get there first
+            while(temp->nextNode->nextNode != headNode) {
+                temp = temp->nextNode;
+            }
 
-        Node<T> *temp = headNode;
-        while(temp->nextNode != nullptr && temp->nextNode->nextNode != nullptr) { // added check if list hasn't reached end to be safe, could probably remove
-            temp = temp->nextNode;
+            Node<T> *toDelete = temp->nextNode; // mark tail for deletion
+            temp->nextNode = headNode; // last's next node to point to head (circularize)
+            delete toDelete;
+
         }
-
-        Node<T> *toDelete = temp->nextNode;
-        temp->nextNode = toDelete->nextNode;
-        delete toDelete;
-
         size--;
-
-
     }
 
     void deleteAtPosition(T value, int position) {
@@ -336,7 +347,6 @@ int main() {
 
 
     list.deleteAtHead();
-
     list.deleteAtTail();
 
     // list.deleteAtPosition(MonopolyBoard("Mayfair", "Dark Blue", 400, 50), 1);
