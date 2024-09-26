@@ -56,8 +56,13 @@ private:
 
 public:
     CircularLinkedList() {
+        int size = 0;
     headNode = nullptr;
     }
+
+    // do while for traversing ciruclar linked list
+    // pointer for new node
+
 
 // Core Tasks
     void insertAtHead(T value) {
@@ -70,6 +75,7 @@ public:
             headNode = newNode; // after linking newNode to the list, update headNode to be this newNode
         }
 
+        size++;
       cout<<"Insert at head unwritten"<<endl;
 
     }
@@ -88,10 +94,11 @@ public:
             temp->nextNode = newNode;
         }
 
+        size++;
         cout<<"Insert at Tail unwritten"<<endl;
     }
 
-    void insertAtPosition(T value, T position) {
+    void insertAtPosition(T value, int position) {
 
         Node<T> *newNode = new Node<T>(value);
         if(headNode == nullptr) { // as always, if list is empty, just enter
@@ -104,6 +111,7 @@ public:
             // insert newNode with the value at position
             temp->nextNode = newNode;
         }
+        size++;
 
 
         cout<<"Insert at Position unwritten"<<endl;
@@ -203,6 +211,11 @@ public:
         cout << "Is List Empty unwritten" << endl;
     }
     void countNodes() {
+        // if list is empty
+        // temp pointer to traverse
+        //do while loop while temp != headNode
+        //return count
+
         cout << "Count Nodes unwritten" << endl;
     }
 
@@ -233,7 +246,7 @@ int main() {
     list.deleteAtHead();
     list.deleteAtTail();
 
-    // list.insertAtPosition(MonopolyBoard("Kentucky Avenue", "Red", 220, 18), 5);
+    list.insertAtPosition(MonopolyBoard("Kentucky Avenue", "Red", 220, 18), 5);
 
     // list.deleteAtHead();
     //

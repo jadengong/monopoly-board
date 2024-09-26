@@ -6,7 +6,7 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.29"
@@ -41,14 +41,14 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "classMain::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-classMain-Debug-4f7bba5d0b35de10fdca.json",
+					"jsonFile" : "target-classMain-Debug-aaa6c3170a175751aac0.json",
 					"name" : "classMain",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "sdsu_projects::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-sdsu_projects-Debug-64fb663fda0618a8cd0a.json",
+					"jsonFile" : "target-sdsu_projects-Debug-5203b55b7485912db265.json",
 					"name" : "sdsu_projects",
 					"projectIndex" : 0
 				}
@@ -58,8 +58,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Code/projects/sdsu-projects/cmake-build-debug",
-		"source" : "C:/Code/projects/sdsu-projects"
+		"build" : "/Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug",
+		"source" : "/Users/jadenong/Documents/GitHub/sdsu-projects"
 	},
 	"version" : 
 	{
