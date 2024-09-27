@@ -13,11 +13,12 @@ public:
 
     // REMINDER: copy paste finalized code on replit and make sure it can run
 
+    // Constructor with default values
     MonopolyBoard() : propertyName(""), propertyColor(""), value(0), rent(0) {}
 
 
+    // Constructor with given parameter values
     MonopolyBoard(string propertyName,string propertyColor,int value, int rent){
-       /*Define overloaded constructor here*/
         this->propertyName = propertyName;
         this->propertyColor = propertyColor;
         this->value = value;
@@ -26,16 +27,30 @@ public:
     }
 
 
-    bool isEqual(MonopolyBoard other) {
-        /*Define is equal here*/
+    // Determining if two objects are equal
+    bool isEqual(const MonopolyBoard& other) const {
         return (propertyName == other.propertyName && propertyColor == other.propertyColor && value == other.value && rent == other.rent);
     }
 
-    void print() {
-        /*Define Print Here*/
+    // Compact Node Information
+    void print() const {
         cout << "(Name: " << propertyName << ", Color: " << propertyColor << ", Value: " << value << ", Rent: " << rent << ")" << endl;
     }
 };
+
+
+    // Operator overload for print
+    std::ostream& operator<<(std::ostream& os, const MonopolyBoard& obj) {
+
+        cout << "Property found! Details below: " << endl;
+        cout << "Property Name: " << obj.propertyName << endl;
+        cout << "Property Color: " << obj.propertyColor << endl;
+        cout << "Value: $" << obj.value << endl;
+        cout << "Rent: $" << obj.rent << endl;
+        return os;
+}
+
+
 
 // Template Node class
 template <typename T> class Node {
@@ -65,60 +80,80 @@ public:
 
 
 // Core Tasks
+
+    /**
+    * Insert a node at head of a CLL
+    *
+    * @param value Node to insert
+    */
     void insertAtHead(T value) {
-        Node<T> *newNode = new Node<T>(value);
-
-        if(headNode == nullptr) { // if list is empty, set the headNode to be the newNode
-            headNode = newNode;
-            newNode->nextNode = headNode;
-        }else {
-            Node<T> *temp = headNode;
-            while(temp->nextNode != headNode) {
-                temp = temp->nextNode;
-            }
-            newNode->nextNode = headNode; // set the newNode's next pointer at the current first node of the list
-            temp->nextNode = newNode;
-            headNode = newNode; // after linking newNode to the list, update headNode to be this newNode
-        }
-
-        ++size;
-    }
-
-
-    void insertAtTail(T value) {
-        Node<T> *newNode = new Node<T>(value);
+        Node<T> *newNode = new Node<T>(value); // Allocating memory for a new node to be inserted
 
         if(headNode == nullptr) {
-            headNode = newNode; // if empty, just enter
-            newNode->nextNode = headNode;
-        } else {
-            Node<T> *temp = headNode; // use a pointer and traverse until next is the end
-            while(temp->nextNode != headNode) {
+            headNode = newNode; // Update headNode
+            newNode->nextNode = headNode; // Link lastNode to the headNode
+        }else {
+            Node<T> *temp = headNode;
+            while(temp->nextNode != headNode) { // Get tailNode
                 temp = temp->nextNode;
             }
-            temp->nextNode = newNode; // set last's next node to be the new node
-
-            newNode->nextNode = headNode; // circularize
+            newNode->nextNode = headNode; // Set newNode's next pointer to be the current Head
+            temp->nextNode = newNode; // Link lastNode to headNode
+            headNode = newNode; // update headNode
         }
-
         ++size;
-
-
     }
 
+
+    /**
+     * Insert a node at tail of CLL
+     *
+     *  @param value Node to insert
+     */
+    void insertAtTail(T value) {
+        Node<T> *newNode = new Node<T>(value); // Allocate memory for a new node to be inserted
+
+        if(headNode == nullptr) {
+            headNode = newNode; // Update headNode
+            newNode->nextNode = headNode; // Link back to itself
+        } else {
+            Node<T> *temp = headNode;
+            while(temp->nextNode != headNode) { // Get tailNode
+                temp = temp->nextNode;
+            }
+            temp->nextNode = newNode; // Set previous tailNode's next pointer to the new tailNode
+
+            newNode->nextNode = headNode; // Circularize
+        }
+        ++size;
+    }
+
+    /** Insert a node between the head and tail of a CLL
+     *
+     * @param value Node to insert
+     * @param position Index (0-based) to insert the Node
+     */
     void insertAtPosition(T value, int position) {
-        int index = 0; // using index makes sure we stop one node before
+        int index = 0; // Use index to stop one Node before desired
 
         Node<T> *newNode = new Node<T>(value);
 
         if(position == 0) {
-            insertAtHead(value); // save some lines by calling our insert at head
+            insertAtHead(value);
+            return;
+        }
+
+        if(position == size) {
+            insertAtTail(value);
             return;
         }
 
         if(position > size || position < 0) {
-            throw out_of_range("Position out of range");
+            throw invalid_argument("Position out of range!");
         }
+
+        Node<T> *newNode = new Node<T>(value); // Allocate memory for a new node to be inserted
+
 
         if(headNode == nullptr) { // as always, if list is empty, just enter
             headNode = newNode;
@@ -230,13 +265,20 @@ public:
 
     void search(T value) {
         Node<T> *temp = headNode;
-        while(temp != nullptr) {
-            if(temp->data.isEqual(value)) {
-                cout << "Property: " << temp->data << endl;
-                cout << "Value: " << temp->data << endl;
+        bool found = false;
+        do {
+            if (temp->data.isEqual(value)) {
+                cout << temp->data << std::endl;
+                found = true;
             }
+            temp = temp->nextNode;
+        } while (temp != headNode);
 
+        if(found == false) {
+            cout << "Property not on the list." << endl;
         }
+
+
     }
 
     void printList() { // loop the circular list from head to tail, and then loop back to the head
@@ -266,6 +308,9 @@ public:
     //Optional Tasks
     //Level 1
     void reverseCLList() {
+
+
+
         cout << "Reverse List unwritten" << endl;
     } void sortCLList() {
         cout << "Sort List unwritten" << endl;
@@ -351,7 +396,8 @@ int main() {
     // list.deleteAtHead();
     // list.deleteAtTail();
 
-    list.deleteAtPosition(MonopolyBoard(), 222);
+    list.search(MonopolyBoard("Boardwalk", "Dark Blue", 400, 50));
+
 
 
     //Optional Level 1 Tasks
@@ -361,9 +407,9 @@ int main() {
      // list.printHeadNode();
      // list.printLastNode();
     // list.isListEmpty();
-     list.countNodes();
+    list.countNodes();
 
-    list.printList();
+    //list.printList();
 
     // //Optional Level 2 Tasks
     // list.convertCLList();
