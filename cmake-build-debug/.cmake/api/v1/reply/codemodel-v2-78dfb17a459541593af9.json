@@ -6,7 +6,7 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.29"
@@ -15,8 +15,7 @@
 					"source" : ".",
 					"targetIndexes" : 
 					[
-						0,
-						1
+						0
 					]
 				}
 			],
@@ -28,11 +27,10 @@
 					[
 						0
 					],
-					"name" : "sdsu_projects",
+					"name" : "monopoly-board",
 					"targetIndexes" : 
 					[
-						0,
-						1
+						0
 					]
 				}
 			],
@@ -40,15 +38,8 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "classMain::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-classMain-Debug-aaa6c3170a175751aac0.json",
-					"name" : "classMain",
-					"projectIndex" : 0
-				},
-				{
-					"directoryIndex" : 0,
 					"id" : "sdsu_projects::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-sdsu_projects-Debug-5203b55b7485912db265.json",
+					"jsonFile" : "target-sdsu_projects-Debug-3d078c71f5499353c12e.json",
 					"name" : "sdsu_projects",
 					"projectIndex" : 0
 				}
@@ -58,8 +49,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug",
-		"source" : "/Users/jadenong/Documents/GitHub/sdsu-projects"
+		"build" : "C:/Code/projects/monopoly-board/cmake-build-debug",
+		"source" : "C:/Code/projects/monopoly-board"
 	},
 	"version" : 
 	{
