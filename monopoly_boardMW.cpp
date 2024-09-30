@@ -318,19 +318,47 @@ public:
         cout << "Reverse List unwritten" << endl;
     } void sortCLList() {
         cout << "Sort List unwritten" << endl;
-    } void printHeadNode() {
-        cout << "Print Head Node unwritten" << endl;
-    } void printLastNode() {
-        cout << "Print Last Node unwritten" << endl;
-    } void isListEmpty() {
-        cout << "Is List Empty unwritten" << endl;
     }
-    void countNodes() {
-        // if list is empty
-        // temp pointer to traverse
-        //do while loop while temp != headNode
-        //return count
 
+
+    void printHeadNode() {
+        if(isListEmpty()) {
+            cout << "List is empty. Cannot print head node." << endl;
+            return;
+        }
+        cout << headNode->data << endl; // Print headNode information
+
+    }
+
+    void printLastNode() {
+        if(isListEmpty()) {
+            cout << "List is empty. Cannot print last node." << endl;
+            return;
+        }
+
+        Node<T> *temp = headNode;
+
+        while(temp->nextNode != headNode) {
+            temp = temp->nextNode;
+        }
+
+        cout << temp->data << endl; // Print tailNode information
+    }
+
+    /**
+     * Determines if the list is empty.
+     *
+     * @return "true" if empty, "false" if not empty
+     */
+    bool isListEmpty() {
+        return headNode == nullptr;
+    }
+
+
+    /**
+     * Counts the number of nodes in the list.
+     */
+    void countNodes() {
         if(headNode == nullptr) {
             cout << "List is empty." << endl;
             return;
