@@ -128,15 +128,13 @@ public:
         ++size;
     }
 
-    /** Insert a node between the head and tail of a CLL
+    /** Insert a node somewhere in the CLL
      *
      * @param value Node to insert
      * @param position Index (0-based) to insert the Node
      */
     void insertAtPosition(T value, int position) {
         int index = 0; // Use index to stop one Node before desired
-
-        Node<T> *newNode = new Node<T>(value);
 
         if(position == 0) {
             insertAtHead(value);
@@ -152,9 +150,6 @@ public:
             throw invalid_argument("Position out of range!");
         }
 
-
-
-        
 
         Node<T> *newNode = new Node<T>(value); // Allocate memory for a new node to be inserted
 
@@ -177,11 +172,13 @@ public:
         temp->nextNode = newNode; // pointing previous node to new node
 
         ++size;
-
-
     }
 
 
+    /**
+     * Deletes a node at the head of a CLL
+     *
+     */
     void deleteAtHead() {
 
         if(headNode == nullptr) { // all three delete methods will have a check for an empty list
@@ -211,6 +208,10 @@ public:
     }
 
 
+    /**
+     * Deletes a node at the tail of a CLL
+     *
+     */
     void deleteAtTail() {
 
         if(headNode == nullptr) { // all three delete methods will have a check for an empty list
@@ -237,6 +238,13 @@ public:
         size--;
     }
 
+
+    /**
+     * Deletes a node somewhere in the CLL
+     *
+     *  @param value Node to delete
+     * @param position Index (0-based) to delete the Node
+     */
     void deleteAtPosition(T value, int position) {
         int index = 0;
 
