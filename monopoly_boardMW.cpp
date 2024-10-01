@@ -181,28 +181,27 @@ public:
      */
     void deleteAtHead() {
 
-        if(headNode == nullptr) { // all three delete methods will have a check for an empty list
-            cout << "List is empty, can't delete" << endl;
+        if(headNode == nullptr) { // If list is empty, cannot delete at head
+            cout << "List is empty, can't delete at head." << endl;
             return;
         }
 
-        // if one node
+        // If there is only one node
         if(headNode->nextNode == headNode) {
             delete headNode;
             headNode = nullptr;
-        } else { // must traverse to last node (pointing to the head)
+        } else { // Otherwise, get last node
             Node<T> *temp = headNode;
 
             while(temp->nextNode != headNode) {
                 temp = temp->nextNode;
             }
 
-            Node<T> *toDelete = headNode;
-            headNode = headNode->nextNode;
-            temp->nextNode = headNode; // last's nextnode to be the new headnode
+            Node<T> *toDelete = headNode; // Mark a pointer to the head we will delete
+            headNode = headNode->nextNode; // Move the headNode of the list to the nextNode
+            temp->nextNode = headNode; // Link the last node's nextNode to the new headNode
 
-            delete toDelete;
-
+            delete toDelete; // Delete the old head node
         }
         --size;
     }
@@ -214,26 +213,25 @@ public:
      */
     void deleteAtTail() {
 
-        if(headNode == nullptr) { // all three delete methods will have a check for an empty list
-            cout << "List is empty, can't delete" << endl;
+        if(headNode == nullptr) { // If list is empty, cannot delete at tail
+            cout << "List is empty, can't delete at tail." << endl;
             return;
         }
 
-        // if one node
+        // If there is only one node
         if(headNode->nextNode == headNode) {
             delete headNode;
             headNode = nullptr;
-        } else {
+        } else { // Otherwise, get last node
             Node<T> *temp = headNode;
 
             while(temp->nextNode->nextNode != headNode) {
                 temp = temp->nextNode;
             }
 
-            Node<T> *toDelete = temp->nextNode; // mark tail for deletion
-            temp->nextNode = headNode; // last's next node to point to head (circularize)
-            delete toDelete;
-
+            Node<T> *toDelete = temp->nextNode; // Mark a pointer to the last node for deletion
+            temp->nextNode = headNode; // Link the node before the last node's nextNode to the current headNode
+            delete toDelete; // Safely delete the old tail node
         }
         size--;
     }
@@ -242,34 +240,39 @@ public:
     /**
      * Deletes a node somewhere in the CLL
      *
-     *  @param value Node to delete
-     * @param position Index (0-based) to delete the Node
+     *
+     *  @param position Index (0-based) to delete the Node
      */
-    void deleteAtPosition(T value, int position) {
+    void deleteAtPosition(int position) {
         int index = 0;
 
-        if(headNode == nullptr) { // all three methods will have a check for an empty list
+        if(headNode == nullptr) { // If the list is empty, cannot delete at the position specified
             cout << "List is empty, can't delete at position: " << position << endl;
             return;
         }
 
-        if(position == 0) {
-            deleteAtHead();
-        }else {
-            Node<T> *temp = headNode;
-            while(temp->nextNode != headNode && index < position - 1) { // iterate if haven't reached the end and if haven't reached our position
-                temp = temp->nextNode;
-                ++index;
-            }
-            if(index != position - 1|| temp->nextNode == headNode) { // the end
-                cout << "Position is not valid" << endl;
-                
+        if(position < 1 || position > size) { // Throw an invalid argument for non-acceptable positions
+            throw invalid_argument("Position out of range! Position must be LESS than the size of the list or GREATER than one");
+        }
 
-            } else { // found
-                Node<T> *toDelete = temp->nextNode; // mark for deletion
-                temp->nextNode = temp->nextNode->nextNode; // connect prev to next
-                delete toDelete;
+        if(position == 0) { // If the position specified is at the head ...
+            deleteAtHead();
+        }else if(position == size) { // Or tail
+            deleteAtTail();
+        }else { // Otherwise iterate until we reach the node prior to the one we want to delete
+            Node<T> *temp = headNode;
+            int posCount = 0; // Initialize a position count to compare with position input
+
+            while(temp->nextNode->nextNode != headNode) { // iterate if haven't reached the end and if haven't reached our position
+                temp = temp->nextNode;
+                posCount++;
             }
+
+            // found
+            Node<T> *toDelete = temp->nextNode; // mark for deletion
+            temp->nextNode = temp->nextNode->nextNode; // connect prev to next
+            delete toDelete;
+
         }
         size--;
     }
