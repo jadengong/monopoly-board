@@ -10,6 +10,7 @@ public:
     string propertyColor;
     int value;
     int rent;
+    
 
     // REMINDER: copy paste finalized code on replit and make sure it can run
 
