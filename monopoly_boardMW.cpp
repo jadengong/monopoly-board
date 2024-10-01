@@ -240,8 +240,8 @@ public:
     /**
      * Deletes a node somewhere in the CLL
      *
-     *
      *  @param position Index (0-based) to delete the Node
+     *  @throws invalid_argument If the input position is less than 0 or greater than the current size of the CLL
      */
     void deleteAtPosition(int position) {
         int index = 0;
@@ -251,33 +251,34 @@ public:
             return;
         }
 
-        if(position < 1 || position > size) { // Throw an invalid argument for non-acceptable positions
-            throw invalid_argument("Position out of range! Position must be LESS than the size of the list or GREATER than one");
-        }
-
         if(position == 0) { // If the position specified is at the head ...
             deleteAtHead();
         }else if(position == size) { // Or tail
             deleteAtTail();
-        }else { // Otherwise iterate until we reach the node prior to the one we want to delete
+        }else if(position < 0 || position >= size) { // Throw an invalid argument for non-acceptable positions
+            throw invalid_argument("Position out of range! Position must be LESS than the size of the list or GREATER than or EQUAL to zero");
+        }
+            // Otherwise iterate until we reach the node prior to the one we want to delete
             Node<T> *temp = headNode;
             int posCount = 0; // Initialize a position count to compare with position input
 
-            while(temp->nextNode->nextNode != headNode) { // iterate if haven't reached the end and if haven't reached our position
-                temp = temp->nextNode;
-                posCount++;
-            }
-
-            // found
-            Node<T> *toDelete = temp->nextNode; // mark for deletion
-            temp->nextNode = temp->nextNode->nextNode; // connect prev to next
-            delete toDelete;
-
+        for(posCount = 0; posCount < position - 1; posCount++) { // Traverse the CLL until we reach the position before the position we want to delete at
+            temp = temp->nextNode;
         }
+
+        Node<T> *toDelete = temp->nextNode; // Mark node at position for deletion
+        temp->nextNode = temp->nextNode->nextNode; // Link the previous node to the one after the position we want to delete at
+        delete toDelete;
+
         size--;
     }
 
-
+    /**
+     * Searches for a specific Monopoly object/property in a CLL
+     *
+     * @param value The node/property to search for
+     *
+     */
     void search(T value) {
         Node<T> *temp = headNode;
         bool found = false;
@@ -292,11 +293,10 @@ public:
         if(found == false) {
             cout << "Property not on the list." << endl;
         }
-
-
     }
 
-    void printList() { // loop the circular list from head to tail, and then loop back to the head
+    // Prints the CLL by looping from head to tail, then back to head
+    void printList() {
         Node<T> *temp = headNode;
 
         if(temp == nullptr) {
@@ -311,13 +311,7 @@ public:
             if(temp != headNode) {
                 cout << " -> ";
             }
-
         } while(temp != headNode);
-
-
-
-
-
     }
 
     //Optional Tasks
@@ -328,16 +322,16 @@ public:
         cout << "Sort List unwritten" << endl;
     }
 
-
+    // Print the first node's information
     void printHeadNode() {
         if(isListEmpty()) {
             cout << "List is empty. Cannot print head node." << endl;
             return;
         }
         cout << headNode->data << endl; // Print headNode information
-
     }
 
+    // Print the last node's information
     void printLastNode() {
         if(isListEmpty()) {
             cout << "List is empty. Cannot print last node." << endl;
@@ -362,7 +356,6 @@ public:
         return headNode == nullptr;
     }
 
-
     /**
      * Counts the number of nodes in the list.
      */
@@ -373,7 +366,7 @@ public:
         }
 
         Node<T> *temp = headNode;
-        int count = 0; // for the head
+        int count = 0; // Initialize a counter to be printed
 
         do {
             temp = temp->nextNode;
@@ -381,14 +374,29 @@ public:
         }while(temp != headNode);
 
         cout << "Total count of nodes is: " << count << endl;
-
     }
 
     //Optional Tasks
     // Level2
+
+    // De-circularize a CLL
     void convertCLList() {
-        cout << "Convert Circular List Unwritten." << endl;
-    } void updateNodeValue() {
+        if(isListEmpty()) {
+            cout << "List is empty." << endl;
+            return;
+        }
+
+        Node<T> *temp = headNode; // Get last node
+        while(temp->nextNode != headNode) {
+            temp = temp->nextNode;
+        }
+
+        temp->nextNode = nullptr; // Set the last node to null, effectively decircularizing the CLL
+    }
+
+
+
+    void updateNodeValue() {
         cout << "update Node value unwritten" << endl;
     } void displaySpecificColorNode() {
         cout << "Display Specific color Node" << endl;
@@ -403,12 +411,9 @@ int main() {
     // Create a LinkedList of Data objects
     CircularLinkedList<MonopolyBoard> list;
 
-
     // Insert elements
     list.insertAtHead(MonopolyBoard("Mediterranean Avenue", "Brown", 60, 2));
-
     list.insertAtTail(MonopolyBoard("Park Place", "Dark Blue", 400, 50));
-
     list.insertAtPosition(MonopolyBoard("Baltic Avenue", "Brown", 60, 2), 1);
     list.insertAtPosition(MonopolyBoard("Oriental Avenue", "Light Blue", 100, 6), 2);
     list.insertAtPosition(MonopolyBoard("Vermont Avenue", "Light Blue", 100, 6), 3);
@@ -435,6 +440,7 @@ int main() {
 
     // list.deleteAtHead();
     // list.deleteAtTail();
+    // list.deleteAtPosition(2);
 
     list.search(MonopolyBoard("Boardwalk", "Dark Blue", 400, 50));
 
@@ -449,7 +455,9 @@ int main() {
     // list.isListEmpty();
     list.countNodes();
 
-    //list.printList();
+    list.printList();
+
+
 
     // //Optional Level 2 Tasks
     // list.convertCLList();
