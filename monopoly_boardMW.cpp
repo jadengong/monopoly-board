@@ -312,9 +312,6 @@ public:
     //Optional Tasks
     //Level 1
     void reverseCLList() {
-
-
-
         cout << "Reverse List unwritten" << endl;
     } void sortCLList() {
         cout << "Sort List unwritten" << endl;
