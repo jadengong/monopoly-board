@@ -36,16 +36,16 @@ In order for the code to run, make sure that you have the appropriate environemn
   - Launch your IDE of choice and open the cloned directory
 3. Build the project (with CMake)
   1. Execute these commands in a terminal to create and navigate into a build directory
-    - ```
+- ```
      mkdir build 
      cd build
-     ```
+  ```
   2. Then configure the project with CMake:
-    - ```
+- ```
      cmake ..
-     ```
+  ```
   3. Lastly, build the project using make:
-    - ```
+- ```
      make
      ```
 If the project is built successfully, run the executable file named Monopoly_Board with the following command:
