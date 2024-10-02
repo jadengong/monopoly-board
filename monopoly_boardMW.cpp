@@ -284,7 +284,7 @@ public:
         bool found = false;
         do {
             if (temp->data.isEqual(value)) {
-                cout << temp->data << std::endl;
+                cout << temp->data << endl;
                 found = true;
             }
             temp = temp->nextNode;
@@ -396,10 +396,7 @@ public:
             // Insert new node and link
             newNode->nextNode = current->nextNode;
             current->nextNode = newNode;
-
-
         }
-
     }
 
     // Print the first node's information
