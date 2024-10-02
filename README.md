@@ -5,7 +5,7 @@ This project implements a Monopoly game board simulation using a circular linked
 - Insert
 - Delete
 - Search
-- Display
+- Print
 - Reverse
 - Sort
 - Merge
@@ -72,12 +72,12 @@ void insertAtHead(T value) {
             }
             newNode->nextNode = headNode; // Set newNode's next pointer to be the current Head
             temp->nextNode = newNode; // Link lastNode to headNode
-            headNode = newNode; // update headNode
+            headNode = newNode; // Update headNode
         }
         ++size;
     }
 ```
-Description: Inserts a node at the head of a circular linked list. Using a generic value, insertAtHead first handles if the CLL is empty, then iterates to the last node in order to insert the new node after the last node. 
+Description: Inserts a node at the head of a circular linked list. Using a generic value, insertAtHead first handles if the CLL is empty, then iterates to the last node in order to insert the new node after the last node. Best case is O(1) is the list is empty, where we can insert without traversal. Worse case is O(N) since if the list is not empty, traversal must occur to reach the last node. 
 
 Time Complexity: 
 - Best Case: O(1)
@@ -103,7 +103,7 @@ void insertAtTail(T value) {
         ++size;
     }
 ```
-Description: Inserts a node at the tail of a circular linked list. Using a generic value, insertAtTail first handles if the CLL is empty, then iterates to the last node in order to insert the new node there. 
+Description: Inserts a node at the tail of a circular linked list. Using a generic value, insertAtTail first handles if the CLL is empty, then iterates to the last node in order to insert the new node there. The best case is O(1) is the list is empty, since a new node can be created and just adjust pointers. Worse case is O(N) if the list is not empty, and traversal must happen. 
 
 Time Complexity: 
 - Best Case: O(1)
@@ -152,7 +152,7 @@ void insertAtPosition(T value, int position) {
         ++size;
     }
 ```
-Description: Inserts a node at a specified position of a circular linked list. Also using a generic value, insertAtPosition requires a position to insert a new node at. This method utilizes an invalid_argument if the position entered is inapplicable, and has base cases for inserting at the head or tail of the list. 
+Description: Inserts a node at a specified position of a circular linked list. Also using a generic value, insertAtPosition requires a position to insert a new node at. This method utilizes an invalid_argument if the position entered is inapplicable, and has base cases for inserting at the head or tail of the list. Best case of O(1) can be achieved if desired position is first or out of bounds. Worse case of O(N) can be achieved in most other cases, where a traversal must occur to reach the desired position. Average time complexity would be O(N) in most cases anyways. 
 
 Time Complexity: 
 - Best Case: O(1)
@@ -188,7 +188,7 @@ void deleteAtHead() {
         --size;
     }
 ```
-Description: Deletes a node at the head of a circular linked list. First checks if the list is empty, then if there is only one node in the list. Otherwise iterate to the last node and link the previous and next nodes prior to deletion.
+Description: Deletes a node at the head of a circular linked list. First checks if the list is empty, then if there is only one node in the list. Otherwise iterate to the last node and link the previous and next nodes prior to deletion. Best case of O(1) can be achieved if there is only one node in the list, or if the list is empty. Worse case of O(N) can be achieved if the list has more than one node, then traversal must happen. 
 
 Time Complexity: 
 - Best Case: O(1)
@@ -221,7 +221,7 @@ void deleteAtTail() {
         size--;
     }
 ```
-Description: Deletes a node at the tail of a circular linked list. First checks if the list is empty, then if there is only one node in the list. Otherwise iterate to the node before the last node and link the previous and next nodes prior to deletion.
+Description: Deletes a node at the tail of a circular linked list. First checks if the list is empty, then if there is only one node in the list. Otherwise iterate to the node before the last node and link the previous and next nodes prior to deletion. Best case of O(1) can be achieved if the list has one or less nodes since a constant statement would check those cases. Worse case of O(N) can be achieved otherwise, when the list must traverse to the node before the last (N-2). 
 
 Time Complexity: 
 - Best Case: O(1)
@@ -257,7 +257,7 @@ void deleteAtPosition(int position) {
         size--;
     }
 ```
-Description: Deletes a node at a specified position of a circular linked list. First checks if the list is empty, then if the position is at the head of the list. Otherwise iterate to the node desired using a counter and link previous and next nodes prior to deletion.
+Description: Deletes a node at a specified position of a circular linked list. First checks if the list is empty, then if the position is at the head of the list. Otherwise iterate to the node desired using a counter and link previous and next nodes prior to deletion. Best case of O(1) can be achieved if position is the first in the list or if the bounds provided are invalid. Worse case of O(N) is achieved otherwise when the list must be traversed in order to get to the position specified. 
 
 Time Complexity: 
 - Best Case: O(1)
@@ -281,7 +281,7 @@ void search(T value) {
         }
     }
 ```
-Description: Searches for a specific Monopoly property in a circular linked list. Requires a generic value to search for in the generic type list. Utilizes a bool flag as a checker if property has been found or not.
+Description: Searches for a specific Monopoly property in a circular linked list. Requires a generic value to search for in the generic type list. Utilizes a bool flag as a checker if property has been found or not. Best case of O(1) can be achieved if value is found at the first node. Worst case of O(N) is achieved otherwise if we have to iterate through N elements to get to the one we want. Assignment and comparison operations are constant time, so anything that isn't the first node requires a traversal, and therefore a O(N) worse case time complexity. 
 
 Time Complexity: 
 - Best Case: O(1)
