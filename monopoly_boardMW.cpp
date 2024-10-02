@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 
+
 using namespace std;
 
 // Data class to store a string and an integer
@@ -440,10 +441,35 @@ public:
         search->data = newValue;
     }
 
+    /**
+     * Displays the properties of all nodes with a specified color
+     *
+     * @param color Specified color of property to display information
+     */
+    void displaySpecificColorNode(string color) {
+        if(isListEmpty()) {
+            cout << "List is empty. Cannot display nodes with the color: " << color << endl;
+            return;
+        }
 
-    void displaySpecificColorNode() {
-        cout << "Display Specific color Node" << endl;
-    } void mergeCLList() {
+        bool found = false; // Flag to check if properties are found with the specified color
+        Node<T> *temp = headNode;
+
+        do {
+            string tempColor = temp->data.propertyColor;
+            if(temp->data.isEqual(tempColor)) { // Check if node has the specified color
+                cout << headNode->data << endl; // Print headNode data
+                found = true;
+            }
+            temp = temp->nextNode;
+
+        }while(temp != headNode);
+
+        // If no nodes match the specified color
+        if(!found) cout << "There are no properties on the list with this color." << endl;
+    }
+
+    void mergeCLList() {
         cout << "Merge Circular Linked List Unwritten" << endl;
     }
 
@@ -499,10 +525,11 @@ int main() {
 
 
 
-    // //Optional Level 2 Tasks
+    //Optional Level 2 Tasks
+
     // list.convertCLList();
     // list.updateNodeValue();
-    // list.displaySpecificColorNode();
+    list.displaySpecificColorNode("Red");
     // list.mergeCLList();
 
     return 0;
