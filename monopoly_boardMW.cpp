@@ -10,7 +10,7 @@ public:
     string propertyColor;
     int value;
     int rent;
-    
+
 
     // REMINDER: copy paste finalized code on replit and make sure it can run
 
@@ -317,9 +317,32 @@ public:
 
     //Optional Tasks
     //Level 1
+
+    // Reverses the nodes in a CLL
     void reverseCLList() {
-        cout << "Reverse List unwritten" << endl;
-    } void sortCLList() {
+        // Reverse by keeping track of the current and previous node while iterating
+        // And setting previous to current, and current to nextNode
+
+        Node<T> *current = headNode;
+        Node<T> *previous = nullptr;
+
+        do {
+            Node<T> *next = current->nextNode; // Keeps track of the next node
+            current->nextNode = previous; // Sets next node to previous, reversing the node position
+            previous = current; // Sets the previous node to the current node
+            current = next; // Sets the current node to the next node
+        }while(current != headNode);
+
+        headNode->nextNode = previous; // Link the head (backwards) to the last node
+        headNode = previous; // Update headNode
+
+    }
+
+    void sortCLList() {
+
+
+
+
         cout << "Sort List unwritten" << endl;
     }
 
@@ -392,14 +415,33 @@ public:
             temp = temp->nextNode;
         }
 
-        temp->nextNode = nullptr; // Set the last node to null, effectively decircularizing the CLL
+        temp->nextNode = nullptr; // Set the last node to null, effectively de-circularizing the CLL
     }
 
 
+    /**
+     * Updates the data of a specified node in a CLL
+     *
+     * @param value Node of which data is to be updated
+     * @param newValue Node with updated data
+     */
+    void updateNodeValue(T value, T newValue) {
+        if(isListEmpty()) {
+            cout << "List is empty. Cannot update node value." << endl;
+        }
 
-    void updateNodeValue() {
-        cout << "update Node value unwritten" << endl;
-    } void displaySpecificColorNode() {
+        // Iterate list for the node
+        Node<T> *search = search(value);
+        if(search == nullptr) {
+            cout << "Property is not on the list. Cannot update." << endl;
+            return;
+        }
+
+        search->data = newValue;
+    }
+
+
+    void displaySpecificColorNode() {
         cout << "Display Specific color Node" << endl;
     } void mergeCLList() {
         cout << "Merge Circular Linked List Unwritten" << endl;
@@ -407,12 +449,9 @@ public:
 
 };
 
-// Main function to demonstrate the LinkedList class
 int main() {
-    // Create a LinkedList of Data objects
     CircularLinkedList<MonopolyBoard> list;
 
-    // Insert elements
     list.insertAtHead(MonopolyBoard("Mediterranean Avenue", "Brown", 60, 2));
     list.insertAtTail(MonopolyBoard("Park Place", "Dark Blue", 400, 50));
     list.insertAtPosition(MonopolyBoard("Baltic Avenue", "Brown", 60, 2), 1);
