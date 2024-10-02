@@ -25,9 +25,12 @@ public:
         this->propertyColor = propertyColor;
         this->value = value;
         this->rent = rent;
-
     }
 
+    // Get the color of a propertyt
+    string getColor() {
+        return propertyColor;
+    }
 
     // Determining if two objects are equal
     bool isEqual(const MonopolyBoard& other) const {
@@ -50,7 +53,9 @@ public:
         cout << "Value: $" << obj.value << endl;
         cout << "Rent: $" << obj.rent << endl;
         return os;
-}
+    }
+
+
 
 
 
@@ -77,9 +82,6 @@ public:
         size = 0;
     headNode = nullptr;
     }
-
-
-
 
 // Core Tasks
 
@@ -177,10 +179,7 @@ public:
     }
 
 
-    /**
-     * Deletes a node at the head of a CLL
-     *
-     */
+    // Deletes a node at the head of a CLL
     void deleteAtHead() {
 
         if(headNode == nullptr) { // If list is empty, cannot delete at head
@@ -209,10 +208,7 @@ public:
     }
 
 
-    /**
-     * Deletes a node at the tail of a CLL
-     *
-     */
+    // Deletes a node at the tail of a CLL
     void deleteAtTail() {
 
         if(headNode == nullptr) { // If list is empty, cannot delete at tail
@@ -339,12 +335,13 @@ public:
 
     }
 
+    // Arranges nodes based on property names in lexicographical order
     void sortCLList() {
 
 
 
 
-        cout << "Sort List unwritten" << endl;
+
     }
 
     // Print the first node's information
@@ -456,9 +453,9 @@ public:
         Node<T> *temp = headNode;
 
         do {
-            string tempColor = temp->data.propertyColor;
-            if(temp->data.isEqual(tempColor)) { // Check if node has the specified color
-                cout << headNode->data << endl; // Print headNode data
+
+            if(temp->data.getColor() == color) { // Check if node has the specified color
+                cout << temp->data << endl; // Print headNode data
                 found = true;
             }
             temp = temp->nextNode;
@@ -469,13 +466,46 @@ public:
         if(!found) cout << "There are no properties on the list with this color." << endl;
     }
 
-    void mergeCLList() {
-        cout << "Merge Circular Linked List Unwritten" << endl;
-    }
+    // Merges two CLL
+    void mergeCLList(CircularLinkedList<T> &secondList) {
+        // If the second list is empty
+        if(secondList.headNode == nullptr) {
+            cout << "Second list is empty. There is nothing to merge." << endl;
+            return;
+        }
 
+        // If the original list is empty, merge
+        if(isListEmpty()) {
+            headNode = secondList.headNode; // Link head to secondList head
+            return;
+        }
+
+        // Get the tail of both lists and link them to the respective heads
+        Node<T> *temp = headNode;
+
+        while(temp->nextNode != headNode) {
+            temp = temp->nextNode;
+        }
+
+        Node<T> *tail1 = temp; // Tail for list 1
+
+        Node<T> *temp2 = secondList.headNode;
+
+        while(temp2->nextNode != secondList.headNode) {
+            temp2 = temp2->nextNode;
+        }
+
+        Node<T> *tail2 = temp2; // Tail for list 2
+
+        tail1->nextNode = secondList.headNode; // Link the original list's tail to head of second list
+        tail2->nextNode = headNode; // Link the tail of second list back to head of original list
+    }
 };
 
+// Main function for test cases
 int main() {
+
+    // Create a new circular linked list object
     CircularLinkedList<MonopolyBoard> list;
 
     list.insertAtHead(MonopolyBoard("Mediterranean Avenue", "Brown", 60, 2));
@@ -529,8 +559,18 @@ int main() {
 
     // list.convertCLList();
     // list.updateNodeValue();
-    list.displaySpecificColorNode("Red");
-    // list.mergeCLList();
+    //list.displaySpecificColorNode("Green");
+
+    // Create a new circular linked list object to merge
+    CircularLinkedList<MonopolyBoard> list2;
+    list2.insertAtHead(MonopolyBoard("Campanile Drive", "Red", 220, 18)); // SDSU
+    list2.insertAtTail(MonopolyBoard("Camino Del Sur", "Black", 220, 18)); // WVHS
+
+    // Merging the two circular linked lists
+    list.mergeCLList(list2);
+    cout << "The list after merge is: " << endl;
+    list.printList();
+    cout << endl;
 
     return 0;
 }
