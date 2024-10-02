@@ -12,22 +12,19 @@ public:
     int value;
     int rent;
 
-
-    // REMINDER: copy paste finalized code on replit and make sure it can run
-
     // Constructor with default values
     MonopolyBoard() : propertyName(""), propertyColor(""), value(0), rent(0) {}
 
 
     // Constructor with given parameter values
-    MonopolyBoard(string propertyName,string propertyColor,int value, int rent){
+    MonopolyBoard(const string &propertyName, const string &propertyColor, const int value, const int rent){
         this->propertyName = propertyName;
         this->propertyColor = propertyColor;
         this->value = value;
         this->rent = rent;
     }
 
-    // Get the color of a propertyt
+    // Get the color of a property
     string getColor() {
         return propertyColor;
     }
@@ -55,9 +52,15 @@ public:
         return os;
     }
 
+    // Operator overload for comparing in sort
+    bool operator>=(const MonopolyBoard& lhs, const MonopolyBoard& rhs) {
+        return lhs.propertyName >= rhs.propertyName;
+    }
 
-
-
+    // Operator overload for comparing in sort
+    bool operator<(const MonopolyBoard& lhs, const MonopolyBoard& rhs) {
+        return lhs.propertyName < rhs.propertyName;
+    }
 
 // Template Node class
 template <typename T> class Node {
@@ -136,6 +139,7 @@ public:
      *
      * @param value Node to insert
      * @param position Index (0-based) to insert the Node
+     * @throws invalid_argument If position is less than 0 or greater than the size of the list, throws an invalid argument
      */
     void insertAtPosition(T value, int position) {
         int index = 0; // Use index to stop one Node before desired
@@ -172,7 +176,7 @@ public:
            index++;
        }
 
-        newNode->nextNode = temp->nextNode; // pointing newnode to next node
+        newNode->nextNode = temp->nextNode; // pointing new node to next node
         temp->nextNode = newNode; // pointing previous node to new node
 
         ++size;
@@ -242,8 +246,6 @@ public:
      *  @throws invalid_argument If the input position is less than 0 or greater than the current size of the CLL
      */
     void deleteAtPosition(int position) {
-        int index = 0;
-
         if(headNode == nullptr) { // If the list is empty, cannot delete at the position specified
             cout << "List is empty, can't delete at position: " << position << endl;
             return;
@@ -337,10 +339,66 @@ public:
 
     // Arranges nodes based on property names in lexicographical order
     void sortCLList() {
+        if(isListEmpty()) {
+            cout << "List is empty. Cannot sort the list." << endl;
+            return;
+        }
+
+        if(headNode->nextNode == headNode) {
+            cout << "List has one node. Cannot sort the list." << endl;
+            return;
+        }
+
+        Node<T> *sorted = nullptr; // Sorted part of the list
+        Node<T> *current = headNode; // Current pointer to sort
+
+        do {
+            Node<T> *next = current->nextNode; // Save the next node before sort
+            sortedInsert(&sorted, current);
+            current = next;
+        }while(current != headNode);
+
+        // Restore circularity
+        Node<T> *last = sorted;
+        while(last->nextNode != sorted) {
+            last = last->nextNode;
+        }
+
+        last->nextNode = sorted;
+        headNode = sorted;
+    }
+
+    // Helper function to insert a node into the sorted part of the list
+    void sortedInsert(Node<T> **sorted, Node<T> *newNode) {
+        // If sorted list is empty
+        if(*sorted == nullptr) {
+            *sorted = newNode;
+            newNode->nextNode = newNode; // Link new node to itself to circularize
+            return;
+        }
+
+        // If new node is smaller than head node of sorted list
+        if((*sorted)->data >= newNode->data) {
+            Node<T> *last = *sorted;
+            while(last->nextNode != *sorted) { // Find last node
+                last = last->nextNode;
+            }
+
+            last->nextNode = newNode; // Point last node to new node
+            newNode->nextNode = *sorted; // Point new node to current head
+            *sorted = newNode; // Update head to the new node
+        }else { // Otherwise the new node should be inserted somewhere in the middle or end
+            Node<T> *current = *sorted;
+
+            while(current->nextNode != *sorted && current->nextNode->data < newNode->data){
+                current = current->nextNode;
+            }
+            // Insert new node and link
+            newNode->nextNode = current->nextNode;
+            current->nextNode = newNode;
 
 
-
-
+        }
 
     }
 
@@ -420,22 +478,32 @@ public:
     /**
      * Updates the data of a specified node in a CLL
      *
-     * @param value Node of which data is to be updated
+     * @param position Position of node of which is to be updated
      * @param newValue Node with updated data
+     * @throws invalid_argument If position is less than 0 or greater than the size of the list, throw an invalid argument
      */
-    void updateNodeValue(T value, T newValue) {
+    void updateNodeValue(int position, T newValue) {
+        int posCount = 0; // To compare with position to find if we've reached our node to update
+
         if(isListEmpty()) {
             cout << "List is empty. Cannot update node value." << endl;
         }
 
-        // Iterate list for the node
-        Node<T> *search = search(value);
-        if(search == nullptr) {
-            cout << "Property is not on the list. Cannot update." << endl;
-            return;
+        if(position < 0 || position > size) {
+            throw invalid_argument("Position out of range! Position must be LESS than the size of the list or GREATER than or EQUAL to zero");
         }
 
-        search->data = newValue;
+        // Iterate list for the node
+        Node<T> *temp = headNode;
+        do {
+            if(position == posCount) { // If both position input and our counter match, update with new value
+                temp->data = newValue;
+                return;
+            } // Otherwise keep iterating until end of the CLL
+            posCount++;
+            temp = temp->nextNode;
+        }while(temp != headNode);
+
     }
 
     /**
@@ -508,9 +576,56 @@ int main() {
     // Create a new circular linked list object
     CircularLinkedList<MonopolyBoard> list;
 
+    cout << "Identify that the list is empty to start." << endl;
+    list.printList();
+    cout << endl;
+
+    // Insert node at the head of the CLL
     list.insertAtHead(MonopolyBoard("Mediterranean Avenue", "Brown", 60, 2));
+    cout << "List after insertion at head: " << endl;
+    list.printList();
+    cout << endl;
+
+    // Insert node at the tail of the CLL
     list.insertAtTail(MonopolyBoard("Park Place", "Dark Blue", 400, 50));
+    cout << "List after insertion at tail: " << endl;
+    list.printList();
+    cout << endl;
+
+    // Delete node at the head of the CLL
+    list.deleteAtHead();
+    cout << "List after deletion at head: " << endl;
+    list.printList();
+    cout << endl;
+
+    // Delete node at tail of the CLL
+    list.insertAtHead(MonopolyBoard("Mediterranean Avenue", "Brown", 60, 2)); // Insert a node to have at least 2 nodes in the CLL
+    cout << "List before deletion at tail: " << endl;
+    list.printList();
+    cout << endl;
+    list.deleteAtTail();
+    cout << "List after deletion at tail: " << endl;
+    list.printList();
+    cout << endl;
+
+    // Insert node at a specified position in the CLL
+    list.insertAtTail(MonopolyBoard("Park Place", "Dark Blue", 400, 50)); // Replace this property as we are building the full board by the end of main.
     list.insertAtPosition(MonopolyBoard("Baltic Avenue", "Brown", 60, 2), 1);
+    cout << "List after insertion at position: " << endl;
+    list.printList();
+    cout << endl;
+
+    // Delete node at a specific position
+    list.insertAtPosition(MonopolyBoard("Oriental Avenue", "Light Blue", 100, 6), 2); // Insert a node to be deleted for the sake of functionality, then replace for structure
+    cout << "List before deletion at position: " << endl;
+    list.printList();
+    cout << endl;
+    list.deleteAtPosition(2); // 0-based
+    cout << "List after deletion at position: " << endl;
+    list.printList();
+    cout << endl;
+
+    // Insert the rest of the board for the remaining operations
     list.insertAtPosition(MonopolyBoard("Oriental Avenue", "Light Blue", 100, 6), 2);
     list.insertAtPosition(MonopolyBoard("Vermont Avenue", "Light Blue", 100, 6), 3);
     list.insertAtPosition(MonopolyBoard("Connecticut Avenue", "Light Blue", 100, 6), 4);
@@ -531,46 +646,92 @@ int main() {
     list.insertAtPosition(MonopolyBoard("Pennsylvania Avenue", "Green", 300, 26), 19);
     list.insertAtPosition(MonopolyBoard("Boardwalk", "Dark Blue", 400, 50), 20);
 
-
-
-
-    // list.deleteAtHead();
-    // list.deleteAtTail();
-    // list.deleteAtPosition(2);
-
-    list.search(MonopolyBoard("Boardwalk", "Dark Blue", 400, 50));
-
-
-
-    //Optional Level 1 Tasks
-
-    // list.reverseCLList();
-    // list.sortCLList();
-     // list.printHeadNode();
-     // list.printLastNode();
-    // list.isListEmpty();
-    list.countNodes();
-
-    list.printList();
-
-
-
-    //Optional Level 2 Tasks
-
-    // list.convertCLList();
-    // list.updateNodeValue();
-    //list.displaySpecificColorNode("Green");
-
-    // Create a new circular linked list object to merge
-    CircularLinkedList<MonopolyBoard> list2;
-    list2.insertAtHead(MonopolyBoard("Campanile Drive", "Red", 220, 18)); // SDSU
-    list2.insertAtTail(MonopolyBoard("Camino Del Sur", "Black", 220, 18)); // WVHS
-
-    // Merging the two circular linked lists
-    list.mergeCLList(list2);
-    cout << "The list after merge is: " << endl;
+    cout << "Completed board: " << endl;
     list.printList();
     cout << endl;
+
+    // Search the CLL for a specific node - VALID
+    cout << "Searching..." << endl;
+    list.search(MonopolyBoard("Park Place", "Dark Blue", 400, 50));
+    cout << endl;
+
+    // Search the CLL for a specific node - INVALID
+    cout << "Searching..." << endl;
+    list.search(MonopolyBoard("Westview High School", "Black & Gold", 999, 100));
+    cout << endl;
+
+    // Print out head node information
+    cout << "Head node/property information: " << endl;
+    list.printHeadNode();
+    cout << endl;
+
+    // Print out tail node information
+    cout << "Tail node/property information: " << endl;
+    list.printLastNode();
+    cout << endl;
+
+    // Check if the CLL is empty
+    if(list.isListEmpty()) {
+        cout << "List is empty." << endl;
+    }else {
+        cout << "List is not empty." << endl;
+    }
+    cout << endl;
+
+    // Count the number of nodes
+    list.countNodes();
+    cout << endl;
+
+    // Convert CLL will be at the end for the sake of functionality
+
+    // Display all nodes of a specified color - VALID
+    cout << "Properties with the color Red: " << endl;
+    list.displaySpecificColorNode("Red");
+    cout << endl;
+
+    cout << "Properties with the color Green: " << endl;
+    list.displaySpecificColorNode("Green");
+    cout << endl;
+
+    // Display all nodes of a specified color - INVALID
+    cout << "Properties with the color Black: " << endl;
+    list.displaySpecificColorNode("Black");
+    cout << endl;
+
+    // Update a node's value/property
+    cout << "List before update: " << endl;
+    list.printList();
+    cout << endl;
+    list.updateNodeValue(11 ,MonopolyBoard("New Kentucky Avenue", "Red", 220, 18));
+    cout << "List after update: " << endl;
+    list.printList();
+    cout << endl;
+
+    // Merge two CLL
+    // First create a new CLL and insert some nodes
+    CircularLinkedList<MonopolyBoard> list2;
+    list2.insertAtHead(MonopolyBoard("Campanile Dr", "Red", 200, 20)); // SDSU
+    list2.insertAtHead(MonopolyBoard("Camino Del Sur", "Black", 200, 20)); // WVHS
+
+    // Merge two CLL
+    list.mergeCLList(list2);
+    cout << "List after merge: " << endl;
+    list.printList();
+    cout << endl;
+
+    // Reverse the CLL
+    list.reverseCLList();
+    cout << "List after being reversed: " << endl;
+    list.printList();
+    cout << endl;
+
+    // Sort the CLL lexicographically
+    list.sortCLList();
+    cout << "List after (insertion) sort: " << endl;
+    list.printList();
+    cout << endl;
+
+    cout << "End of main program." << endl;
 
     return 0;
 }
