@@ -1,9 +1,7 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/sdsu_projects.dir/monopoly_boardMW.cpp.obj"
-  "CMakeFiles/sdsu_projects.dir/monopoly_boardMW.cpp.obj.d"
-  "libsdsu_projects.dll.a"
-  "sdsu_projects.exe"
-  "sdsu_projects.exe.manifest"
+  "CMakeFiles/sdsu_projects.dir/monopoly_boardMW.cpp.o"
+  "CMakeFiles/sdsu_projects.dir/monopoly_boardMW.cpp.o.d"
+  "sdsu_projects"
   "sdsu_projects.pdb"
 )
 

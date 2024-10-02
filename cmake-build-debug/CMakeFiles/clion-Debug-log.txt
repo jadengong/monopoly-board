@@ -1,4 +1,4 @@
-"C:\Program Files\JetBrains\CLion 2024.2.0.1\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "MinGW Makefiles" -S C:\Code\projects\monopoly-board -B C:\Code\projects\monopoly-board\cmake-build-debug
--- Configuring done (0.1s)
+/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "Unix Makefiles" -S /Users/jadenong/Documents/GitHub/sdsu-projects -B /Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug
+-- Configuring done (0.0s)
 -- Generating done (0.0s)
--- Build files have been written to: C:/Code/projects/monopoly-board/cmake-build-debug
+-- Build files have been written to: /Users/jadenong/Documents/GitHub/sdsu-projects/cmake-build-debug
