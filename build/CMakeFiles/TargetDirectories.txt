@@ -1,0 +1,3 @@
+/Users/jadenong/Documents/GitHub/sdsu-projects/build/CMakeFiles/sdsu_projects.dir
+/Users/jadenong/Documents/GitHub/sdsu-projects/build/CMakeFiles/edit_cache.dir
+/Users/jadenong/Documents/GitHub/sdsu-projects/build/CMakeFiles/rebuild_cache.dir
