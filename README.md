@@ -50,7 +50,7 @@ In order for the code to run, make sure that you have the appropriate environemn
      ```
 If the project is built successfully, run the executable file named Monopoly_Board with the following command:
 - ```
-  ./Monopoly_Board
+  ./sdsu_projects
   ```
 
 The code will execute in the main function, and the CMake configuration that generate the build files are included in the repository. 
