@@ -35,7 +35,7 @@ In order for the code to run, make sure that you have the appropriate environemn
 2. Open the Project
   - Launch your IDE of choice and open the cloned directory
 
-**NOTE** A cmake-build-debug folder should automatically generate and this makes the program runnable by itself. 
+**NOTE** A cmake-build-debug folder should automatically generate and this makes the program runnable by itself (at least on CLion).
 Otherwise, continue the steps below: 
 
 3. Build the project (with CMake)
