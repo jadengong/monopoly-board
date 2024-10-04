@@ -58,7 +58,7 @@ public:
     }
 
     // Operator overload for comparing in sort
-    bool operator<(const MonopolyBoard& lhs, const MonopolyBoard& rhs) {
+    bool operator<<(const MonopolyBoard& lhs, const MonopolyBoard& rhs) {
         return lhs.propertyName < rhs.propertyName;
     }
 
@@ -390,7 +390,7 @@ public:
         }else { // Otherwise the new node should be inserted somewhere in the middle or end
             Node<T> *current = *sorted;
 
-            while(current->nextNode != *sorted && current->nextNode->data < newNode->data){
+            while(current->nextNode != *sorted && current->nextNode->data << newNode->data){
                 current = current->nextNode;
             }
             // Insert new node and link
