@@ -28,12 +28,16 @@ In order for the code to run, make sure that you have the appropriate environemn
 - **Operating System**
   - Developed on Windows/macOS
 - **Other**
-  - CMake and Makefile
+  - CMake installed on device (Homebrew -> brew install cmake -> for macOS)
  
 ### Instructions
 1. Clone the Repository
 2. Open the Project
   - Launch your IDE of choice and open the cloned directory
+
+**NOTE** A cmake-build-debug folder should automatically generate and this makes the program runnable by itself (at least on CLion).
+Otherwise, continue the steps below: 
+
 3. Build the project (with CMake)
   1. Execute these commands in a terminal to create and navigate into a build directory
 - ```
