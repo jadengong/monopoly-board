@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <stdexcept>
+#include <vector>
+#include <chrono>
 
 using namespace std;
 
@@ -402,66 +404,97 @@ public:
 
     }
 
-    // Arranges nodes based on property names in lexicographical order
+    // Arranges nodes based on property names in lexicographical order using merge sort
     void sortCLList() {
         if(isListEmpty()) {
             throw EmptyListException("sort");
         }
 
         if(headNode->nextNode == headNode) {
-            cout << "List has one node. Cannot sort the list." << endl;
+            // Single node is already sorted
             return;
         }
 
-        Node<T> *sorted = nullptr; // Sorted part of the list
-        Node<T> *current = headNode; // Current pointer to sort
-
-        do {
-            Node<T> *next = current->nextNode; // Save the next node before sort
-            sortedInsert(&sorted, current);
-            current = next;
-        }while(current != headNode);
-
-        // Restore circularity
-        Node<T> *last = sorted;
-        while(last->nextNode != sorted) {
-            last = last->nextNode;
-        }
-
-        last->nextNode = sorted;
-        headNode = sorted;
+        // Convert to linear list for merge sort, then restore circularity
+        convertToLinear();
+        headNode = mergeSort(headNode);
+        restoreCircularity();
     }
 
-    // Helper function to insert a node into the sorted part of the list
-    void sortedInsert(Node<T> **sorted, Node<T> *newNode) {
-        // If sorted list is empty
-        if(*sorted == nullptr) {
-            *sorted = newNode;
-            newNode->nextNode = newNode; // Link new node to itself to circularize
-            return;
+private:
+    // Helper function to convert circular list to linear for sorting
+    void convertToLinear() {
+        if(tailNode != nullptr) {
+            tailNode->nextNode = nullptr;
         }
+    }
 
-        // If new node is smaller than head node of sorted list
-        if((*sorted)->data >= newNode->data) {
-            Node<T> *last = *sorted;
-            while(last->nextNode != *sorted) { // Find last node
-                last = last->nextNode;
-            }
-
-            last->nextNode = newNode; // Point last node to new node
-            newNode->nextNode = *sorted; // Point new node to current head
-            *sorted = newNode; // Update head to the new node
-        }else { // Otherwise the new node should be inserted somewhere in the middle or end
-            Node<T> *current = *sorted;
-
-            while(current->nextNode != *sorted && current->nextNode->data < newNode->data){
+    // Helper function to restore circularity after sorting
+    void restoreCircularity() {
+        if(headNode != nullptr) {
+            Node<T>* current = headNode;
+            while(current->nextNode != nullptr) {
                 current = current->nextNode;
             }
-            // Insert new node and link
-            newNode->nextNode = current->nextNode;
-            current->nextNode = newNode;
+            current->nextNode = headNode;
+            tailNode = current; // Update tail pointer
         }
     }
+
+    // Merge sort implementation for linear linked list
+    Node<T>* mergeSort(Node<T>* head) {
+        if(head == nullptr || head->nextNode == nullptr) {
+            return head;
+        }
+
+        // Split the list into two halves
+        Node<T>* mid = getMiddle(head);
+        Node<T>* secondHalf = mid->nextNode;
+        mid->nextNode = nullptr;
+
+        // Recursively sort both halves
+        Node<T>* left = mergeSort(head);
+        Node<T>* right = mergeSort(secondHalf);
+
+        // Merge the sorted halves
+        return merge(left, right);
+    }
+
+    // Helper function to get the middle node of a linear list
+    Node<T>* getMiddle(Node<T>* head) {
+        if(head == nullptr) return nullptr;
+
+        Node<T>* slow = head;
+        Node<T>* fast = head->nextNode;
+
+        while(fast != nullptr && fast->nextNode != nullptr) {
+            slow = slow->nextNode;
+            fast = fast->nextNode->nextNode;
+        }
+
+        return slow;
+    }
+
+    // Merge two sorted linear lists
+    Node<T>* merge(Node<T>* left, Node<T>* right) {
+        Node<T>* result = nullptr;
+
+        if(left == nullptr) return right;
+        if(right == nullptr) return left;
+
+        // Choose the smaller element
+        if(left->data < right->data) {
+            result = left;
+            result->nextNode = merge(left->nextNode, right);
+        } else {
+            result = right;
+            result->nextNode = merge(left, right->nextNode);
+        }
+
+        return result;
+    }
+
+public:
 
     // Print the first node's information
     void printHeadNode() {
@@ -780,7 +813,7 @@ int main() {
 
     // Sort the CLL lexicographically
     list.sortCLList();
-    cout << "List after (insertion) sort: " << endl;
+    cout << "List after (merge) sort: " << endl;
     list.printList();
     cout << endl;
 
@@ -859,6 +892,52 @@ int main() {
     }
     
     cout << "\nError handling tests completed successfully!" << endl;
+
+    // Test merge sort performance
+    cout << "\n=== Testing Merge Sort Performance ===" << endl;
+    
+    // Create a large list for performance testing
+    CircularLinkedList<MonopolyBoard> performanceList;
+    
+    // Add many properties in random order
+    vector<string> propertyNames = {
+        "Zebra Avenue", "Alpha Street", "Beta Road", "Gamma Lane", "Delta Drive",
+        "Epsilon Way", "Zeta Boulevard", "Eta Circle", "Theta Square", "Iota Place",
+        "Kappa Court", "Lambda Terrace", "Mu Avenue", "Nu Street", "Xi Road",
+        "Omicron Lane", "Pi Drive", "Rho Way", "Sigma Boulevard", "Tau Circle"
+    };
+    
+    vector<string> colors = {"Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Pink", "Brown"};
+    
+    cout << "Creating large list with " << propertyNames.size() << " properties..." << endl;
+    for(int i = 0; i < propertyNames.size(); i++) {
+        performanceList.insertAtTail(MonopolyBoard(
+            propertyNames[i], 
+            colors[i % colors.size()], 
+            100 + (i * 10), 
+            10 + i
+        ));
+    }
+    
+    cout << "List before sorting (first 5 properties):" << endl;
+    performanceList.printList();
+    cout << endl;
+    
+    // Time the merge sort
+    auto start = chrono::high_resolution_clock::now();
+    performanceList.sortCLList();
+    auto end = chrono::high_resolution_clock::now();
+    
+    auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
+    
+    cout << "List after merge sort (first 5 properties):" << endl;
+    performanceList.printList();
+    cout << endl;
+    
+    cout << "Merge sort completed in " << duration.count() << " microseconds" << endl;
+    cout << "Time complexity: O(N log N) - much faster than O(N²) insertion sort!" << endl;
+    
+    cout << "\nPerformance test completed successfully!" << endl;
 
     return 0;
 }
