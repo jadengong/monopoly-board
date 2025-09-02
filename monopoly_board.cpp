@@ -1,8 +1,21 @@
 #include <iostream>
 #include <string>
-
+#include <stdexcept>
 
 using namespace std;
+
+// Custom exception classes for better error handling
+class EmptyListException : public std::runtime_error {
+public:
+    EmptyListException(const string& operation) 
+        : std::runtime_error("List is empty. Cannot perform operation: " + operation) {}
+};
+
+class InvalidPositionException : public std::invalid_argument {
+public:
+    InvalidPositionException(int position, int size) 
+        : std::invalid_argument("Position " + to_string(position) + " is out of range. Valid range: 0 to " + to_string(size - 1)) {}
+};
 
 // Data class to store a string and an integer
 class MonopolyBoard {
@@ -58,7 +71,7 @@ public:
     }
 
     // Operator overload for comparing in sort
-    bool operator<<(const MonopolyBoard& lhs, const MonopolyBoard& rhs) {
+    bool operator<(const MonopolyBoard& lhs, const MonopolyBoard& rhs) {
         return lhs.propertyName < rhs.propertyName;
     }
 
@@ -78,12 +91,14 @@ public:
 template <typename T> class CircularLinkedList {
 private:
     Node<T>* headNode;
+    Node<T>* tailNode;  // Add tail pointer for O(1) tail operations
     int size;
 
 public:
     CircularLinkedList() {
         size = 0;
         headNode = nullptr;
+        tailNode = nullptr;
     }
 
     // Destructor to prevent memory leaks
@@ -94,6 +109,7 @@ public:
     // Copy constructor (Rule of Three)
     CircularLinkedList(const CircularLinkedList& other) {
         headNode = nullptr;
+        tailNode = nullptr;
         size = 0;
         *this = other; // Use assignment operator
     }
@@ -118,8 +134,10 @@ public:
     // Move constructor (Rule of Five)
     CircularLinkedList(CircularLinkedList&& other) noexcept {
         headNode = other.headNode;
+        tailNode = other.tailNode;
         size = other.size;
         other.headNode = nullptr;
+        other.tailNode = nullptr;
         other.size = 0;
     }
 
@@ -128,8 +146,10 @@ public:
         if (this != &other) {
             clear();
             headNode = other.headNode;
+            tailNode = other.tailNode;
             size = other.size;
             other.headNode = nullptr;
+            other.tailNode = nullptr;
             other.size = 0;
         }
         return *this;
@@ -154,14 +174,11 @@ public:
 
         if(headNode == nullptr) {
             headNode = newNode; // Update headNode
+            tailNode = newNode; // Update tailNode
             newNode->nextNode = headNode; // Link lastNode to the headNode
         }else {
-            Node<T> *temp = headNode;
-            while(temp->nextNode != headNode) { // Get tailNode
-                temp = temp->nextNode;
-            }
             newNode->nextNode = headNode; // Set newNode's next pointer to be the current Head
-            temp->nextNode = newNode; // Link lastNode to headNode
+            tailNode->nextNode = newNode; // Link tailNode to newNode
             headNode = newNode; // update headNode
         }
         ++size;
@@ -178,15 +195,12 @@ public:
 
         if(headNode == nullptr) {
             headNode = newNode; // Update headNode
+            tailNode = newNode; // Update tailNode
             newNode->nextNode = headNode; // Link back to itself
         } else {
-            Node<T> *temp = headNode;
-            while(temp->nextNode != headNode) { // Get tailNode
-                temp = temp->nextNode;
-            }
-            temp->nextNode = newNode; // Set previous tailNode's next pointer to the new tailNode
-
+            tailNode->nextNode = newNode; // Set previous tailNode's next pointer to the new tailNode
             newNode->nextNode = headNode; // Circularize
+            tailNode = newNode; // Update tailNode
         }
         ++size;
     }
@@ -210,8 +224,8 @@ public:
             return;
         }
 
-        if(position > size || position < 0) {
-            throw invalid_argument("Position out of range!");
+        if(position < 0 || position > size) {
+            throw InvalidPositionException(position, size + 1);
         }
 
 
@@ -220,6 +234,7 @@ public:
 
         if(headNode == nullptr) { // as always, if list is empty, just enter
             headNode = newNode;
+            tailNode = newNode;
             newNode->nextNode = headNode; // point to self for circularity
             ++size;
             return;
@@ -243,24 +258,18 @@ public:
     void deleteAtHead() {
 
         if(headNode == nullptr) { // If list is empty, cannot delete at head
-            cout << "List is empty, can't delete at head." << endl;
-            return;
+            throw EmptyListException("delete at head");
         }
 
         // If there is only one node
         if(headNode->nextNode == headNode) {
             delete headNode;
             headNode = nullptr;
-        } else { // Otherwise, get last node
-            Node<T> *temp = headNode;
-
-            while(temp->nextNode != headNode) {
-                temp = temp->nextNode;
-            }
-
+            tailNode = nullptr;
+        } else { // Otherwise, use tail pointer
             Node<T> *toDelete = headNode; // Mark a pointer to the head we will delete
             headNode = headNode->nextNode; // Move the headNode of the list to the nextNode
-            temp->nextNode = headNode; // Link the last node's nextNode to the new headNode
+            tailNode->nextNode = headNode; // Link the tail node's nextNode to the new headNode
 
             delete toDelete; // Delete the old head node
         }
@@ -272,23 +281,24 @@ public:
     void deleteAtTail() {
 
         if(headNode == nullptr) { // If list is empty, cannot delete at tail
-            cout << "List is empty, can't delete at tail." << endl;
-            return;
+            throw EmptyListException("delete at tail");
         }
 
         // If there is only one node
         if(headNode->nextNode == headNode) {
             delete headNode;
             headNode = nullptr;
-        } else { // Otherwise, get last node
+            tailNode = nullptr;
+        } else { // Otherwise, find the node before tail
             Node<T> *temp = headNode;
 
-            while(temp->nextNode->nextNode != headNode) {
+            while(temp->nextNode != tailNode) {
                 temp = temp->nextNode;
             }
 
-            Node<T> *toDelete = temp->nextNode; // Mark a pointer to the last node for deletion
+            Node<T> *toDelete = tailNode; // Mark a pointer to the last node for deletion
             temp->nextNode = headNode; // Link the node before the last node's nextNode to the current headNode
+            tailNode = temp; // Update tail pointer
             delete toDelete; // Safely delete the old tail node
         }
         size--;
@@ -303,8 +313,7 @@ public:
      */
     void deleteAtPosition(int position) {
         if(headNode == nullptr) { // If the list is empty, cannot delete at the position specified
-            cout << "List is empty, can't delete at position: " << position << endl;
-            return;
+            throw EmptyListException("delete at position " + to_string(position));
         }
 
         if(position == 0) { // If the position specified is at the head ...
@@ -312,7 +321,7 @@ public:
         }else if(position == size) { // Or tail
             deleteAtTail();
         }else if(position < 0 || position >= size) { // Throw an invalid argument for non-acceptable positions
-            throw invalid_argument("Position out of range! Position must be LESS than the size of the list or GREATER than or EQUAL to zero");
+            throw InvalidPositionException(position, size);
         }
             // Otherwise iterate until we reach the node prior to the one we want to delete
             Node<T> *temp = headNode;
@@ -396,8 +405,7 @@ public:
     // Arranges nodes based on property names in lexicographical order
     void sortCLList() {
         if(isListEmpty()) {
-            cout << "List is empty. Cannot sort the list." << endl;
-            return;
+            throw EmptyListException("sort");
         }
 
         if(headNode->nextNode == headNode) {
@@ -446,7 +454,7 @@ public:
         }else { // Otherwise the new node should be inserted somewhere in the middle or end
             Node<T> *current = *sorted;
 
-            while(current->nextNode != *sorted && current->nextNode->data << newNode->data){
+            while(current->nextNode != *sorted && current->nextNode->data < newNode->data){
                 current = current->nextNode;
             }
             // Insert new node and link
@@ -458,8 +466,7 @@ public:
     // Print the first node's information
     void printHeadNode() {
         if(isListEmpty()) {
-            cout << "List is empty. Cannot print head node." << endl;
-            return;
+            throw EmptyListException("print head node");
         }
         cout << headNode->data << endl; // Print headNode information
     }
@@ -467,17 +474,10 @@ public:
     // Print the last node's information
     void printLastNode() {
         if(isListEmpty()) {
-            cout << "List is empty. Cannot print last node." << endl;
-            return;
+            throw EmptyListException("print last node");
         }
 
-        Node<T> *temp = headNode;
-
-        while(temp->nextNode != headNode) {
-            temp = temp->nextNode;
-        }
-
-        cout << temp->data << endl; // Print tailNode information
+        cout << tailNode->data << endl; // Print tailNode information directly
     }
 
     /**
@@ -539,11 +539,11 @@ public:
         int posCount = 0; // To compare with position to find if we've reached our node to update
 
         if(isListEmpty()) {
-            cout << "List is empty. Cannot update node value." << endl;
+            throw EmptyListException("update node value");
         }
 
-        if(position < 0 || position > size) {
-            throw invalid_argument("Position out of range! Position must be LESS than the size of the list or GREATER than or EQUAL to zero");
+        if(position < 0 || position >= size) {
+            throw InvalidPositionException(position, size);
         }
 
         // Iterate list for the node
@@ -566,8 +566,7 @@ public:
      */
     void displaySpecificColorNode(string color) {
         if(isListEmpty()) {
-            cout << "List is empty. Cannot display nodes with the color: " << color << endl;
-            return;
+            throw EmptyListException("display nodes with color: " + color);
         }
 
         bool found = false; // Flag to check if properties are found with the specified color
@@ -598,37 +597,28 @@ public:
         // If the original list is empty, merge
         if(isListEmpty()) {
             headNode = secondList.headNode; // Link head to secondList head
+            tailNode = secondList.tailNode; // Link tail to secondList tail
             size = secondList.size; // Update size
             secondList.headNode = nullptr; // Clear second list to avoid double deletion
+            secondList.tailNode = nullptr;
             secondList.size = 0;
             return;
         }
 
-        // Get the tail of both lists and link them to the respective heads
-        Node<T> *temp = headNode;
-
-        while(temp->nextNode != headNode) {
-            temp = temp->nextNode;
-        }
-
-        Node<T> *tail1 = temp; // Tail for list 1
-
-        Node<T> *temp2 = secondList.headNode;
-
-        while(temp2->nextNode != secondList.headNode) {
-            temp2 = temp2->nextNode;
-        }
-
-        Node<T> *tail2 = temp2; // Tail for list 2
+        // Use tail pointers for O(1) merge operation
+        Node<T> *tail1 = tailNode; // Tail for list 1
+        Node<T> *tail2 = secondList.tailNode; // Tail for list 2
 
         tail1->nextNode = secondList.headNode; // Link the original list's tail to head of second list
         tail2->nextNode = headNode; // Link the tail of second list back to head of original list
+        tailNode = tail2; // Update tail pointer to point to the new tail
         
         // Update size to include both lists
         size += secondList.size;
         
         // Clear second list to avoid double deletion
         secondList.headNode = nullptr;
+        secondList.tailNode = nullptr;
         secondList.size = 0;
     }
 };
@@ -830,6 +820,45 @@ int main() {
     moveList.countNodes();
     
     cout << "\nMemory management tests completed successfully!" << endl;
+
+    // Test improved error handling
+    cout << "\n=== Testing Improved Error Handling ===" << endl;
+    
+    // Test empty list exceptions
+    CircularLinkedList<MonopolyBoard> emptyList;
+    
+    try {
+        emptyList.deleteAtHead();
+    } catch (const EmptyListException& e) {
+        cout << "Caught EmptyListException: " << e.what() << endl;
+    }
+    
+    try {
+        emptyList.printHeadNode();
+    } catch (const EmptyListException& e) {
+        cout << "Caught EmptyListException: " << e.what() << endl;
+    }
+    
+    try {
+        emptyList.sortCLList();
+    } catch (const EmptyListException& e) {
+        cout << "Caught EmptyListException: " << e.what() << endl;
+    }
+    
+    // Test invalid position exceptions
+    try {
+        list.deleteAtPosition(-1);
+    } catch (const InvalidPositionException& e) {
+        cout << "Caught InvalidPositionException: " << e.what() << endl;
+    }
+    
+    try {
+        list.deleteAtPosition(100);
+    } catch (const InvalidPositionException& e) {
+        cout << "Caught InvalidPositionException: " << e.what() << endl;
+    }
+    
+    cout << "\nError handling tests completed successfully!" << endl;
 
     return 0;
 }
