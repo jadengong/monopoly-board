@@ -83,7 +83,63 @@ private:
 public:
     CircularLinkedList() {
         size = 0;
-    headNode = nullptr;
+        headNode = nullptr;
+    }
+
+    // Destructor to prevent memory leaks
+    ~CircularLinkedList() {
+        clear();
+    }
+
+    // Copy constructor (Rule of Three)
+    CircularLinkedList(const CircularLinkedList& other) {
+        headNode = nullptr;
+        size = 0;
+        *this = other; // Use assignment operator
+    }
+
+    // Assignment operator (Rule of Three)
+    CircularLinkedList& operator=(const CircularLinkedList& other) {
+        if (this != &other) { // Self-assignment check
+            clear(); // Clear current list
+            
+            // Copy all nodes from other list
+            if (other.headNode != nullptr) {
+                Node<T>* temp = other.headNode;
+                do {
+                    insertAtTail(temp->data);
+                    temp = temp->nextNode;
+                } while (temp != other.headNode);
+            }
+        }
+        return *this;
+    }
+
+    // Move constructor (Rule of Five)
+    CircularLinkedList(CircularLinkedList&& other) noexcept {
+        headNode = other.headNode;
+        size = other.size;
+        other.headNode = nullptr;
+        other.size = 0;
+    }
+
+    // Move assignment operator (Rule of Five)
+    CircularLinkedList& operator=(CircularLinkedList&& other) noexcept {
+        if (this != &other) {
+            clear();
+            headNode = other.headNode;
+            size = other.size;
+            other.headNode = nullptr;
+            other.size = 0;
+        }
+        return *this;
+    }
+
+    // Helper method to clear all nodes
+    void clear() {
+        while (headNode != nullptr) {
+            deleteAtHead();
+        }
     }
 
 // Core Tasks
@@ -542,6 +598,9 @@ public:
         // If the original list is empty, merge
         if(isListEmpty()) {
             headNode = secondList.headNode; // Link head to secondList head
+            size = secondList.size; // Update size
+            secondList.headNode = nullptr; // Clear second list to avoid double deletion
+            secondList.size = 0;
             return;
         }
 
@@ -564,6 +623,13 @@ public:
 
         tail1->nextNode = secondList.headNode; // Link the original list's tail to head of second list
         tail2->nextNode = headNode; // Link the tail of second list back to head of original list
+        
+        // Update size to include both lists
+        size += secondList.size;
+        
+        // Clear second list to avoid double deletion
+        secondList.headNode = nullptr;
+        secondList.size = 0;
     }
 };
 
@@ -729,6 +795,41 @@ int main() {
     cout << endl;
 
     cout << "End of main program." << endl;
+
+    // Test memory management improvements
+    cout << "\n=== Testing Memory Management Improvements ===" << endl;
+    
+    // Test copy constructor
+    cout << "Testing copy constructor..." << endl;
+    CircularLinkedList<MonopolyBoard> copiedList = list;
+    cout << "Copied list size: ";
+    copiedList.countNodes();
+    
+    // Test assignment operator
+    cout << "Testing assignment operator..." << endl;
+    CircularLinkedList<MonopolyBoard> assignedList;
+    assignedList = list;
+    cout << "Assigned list size: ";
+    assignedList.countNodes();
+    
+    // Test move constructor
+    cout << "Testing move constructor..." << endl;
+    CircularLinkedList<MonopolyBoard> moveList = std::move(assignedList);
+    cout << "Moved list size: ";
+    moveList.countNodes();
+    cout << "Original assigned list is now empty: ";
+    assignedList.countNodes();
+    
+    // Test move assignment
+    cout << "Testing move assignment..." << endl;
+    CircularLinkedList<MonopolyBoard> moveAssignedList;
+    moveAssignedList = std::move(moveList);
+    cout << "Move assigned list size: ";
+    moveAssignedList.countNodes();
+    cout << "Original move list is now empty: ";
+    moveList.countNodes();
+    
+    cout << "\nMemory management tests completed successfully!" << endl;
 
     return 0;
 }
