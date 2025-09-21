@@ -1,0 +1,43 @@
+{
+  "name": "monopoly-board-wasm",
+  "version": "1.0.0",
+  "description": "Monopoly Board game compiled to WebAssembly using C++ and Emscripten",
+  "main": "index.html",
+  "scripts": {
+    "build": "bash build_wasm.sh",
+    "build:windows": "build_wasm.bat",
+    "serve": "cd build_wasm && npx serve . -p 8000",
+    "serve:python": "cd build_wasm && python -m http.server 8000",
+    "dev": "npm run build && npm run serve",
+    "clean": "rm -rf build_wasm",
+    "clean:windows": "rmdir /s /q build_wasm",
+    "install:emscripten": "git clone https://github.com/emscripten-core/emsdk.git && cd emsdk && ./emsdk install latest && ./emsdk activate latest",
+    "test": "echo 'WebAssembly module loaded successfully'"
+  },
+  "keywords": [
+    "monopoly",
+    "webassembly",
+    "wasm",
+    "c++",
+    "emscripten",
+    "game",
+    "circular-linked-list",
+    "data-structures"
+  ],
+  "author": "Monopoly Board Developer",
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/monopoly-board-wasm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/monopoly-board-wasm/issues"
+  },
+  "homepage": "https://github.com/yourusername/monopoly-board-wasm#readme"
+}

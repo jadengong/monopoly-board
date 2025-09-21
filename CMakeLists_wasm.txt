@@ -1,0 +1,55 @@
+# CMakeLists.txt for WebAssembly build
+cmake_minimum_required(VERSION 3.16)
+project(MonopolyBoardWASM)
+
+# Set C++ standard
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Emscripten specific settings
+if(EMSCRIPTEN)
+    # Enable exceptions and RTTI for better compatibility
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_PTHREADS=1")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s DISABLE_EXCEPTION_CATCHING=0")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s ALLOW_MEMORY_GROWTH=1")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s EXPORTED_RUNTIME_METHODS=['ccall','cwrap','addFunction']")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s EXPORTED_FUNCTIONS=['_main','_malloc','_free']")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s MODULARIZE=1")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s EXPORT_NAME='MonopolyBoardWASM'")
+    
+    # Enable WebGL for future graphics enhancements
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_WEBGL2=1")
+    
+    # Optimize for size
+    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -s ASSERTIONS=0")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g -s ASSERTIONS=1")
+endif()
+
+# Add source files
+set(SOURCES
+    main.cpp
+    MonopolyBoard.cpp
+    CircularLinkedList.hpp
+)
+
+# Create the WebAssembly library
+add_library(monopoly_wasm STATIC ${SOURCES})
+
+# Set output directory for WASM files
+set_target_properties(monopoly_wasm PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/wasm"
+)
+
+# Create the main WASM executable
+add_executable(monopoly_board_wasm main.cpp MonopolyBoard.cpp)
+
+# Link the library
+target_link_libraries(monopoly_board_wasm monopoly_wasm)
+
+# Set output properties for Emscripten
+if(EMSCRIPTEN)
+    set_target_properties(monopoly_board_wasm PROPERTIES
+        SUFFIX ".html"
+        LINK_FLAGS "-s WASM=1 -s EXPORTED_RUNTIME_METHODS=['ccall','cwrap'] -s EXPORTED_FUNCTIONS=['_main','_malloc','_free'] -s MODULARIZE=1 -s EXPORT_NAME='MonopolyBoardWASM'"
+    )
+endif()

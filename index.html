@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monopoly Board - WebAssembly Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .wasm-status {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+            text-align: center;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-loading { background: #ffc107; }
+        .status-ready { background: #28a745; }
+        .status-error { background: #dc3545; }
+
+        .main-content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .control-panel {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+
+        .control-panel h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+        }
+
+        .results-panel {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+        }
+
+        .results-panel h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+        }
+
+        .results-content {
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+            min-height: 300px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .property-card {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .property-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        .property-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+        }
+
+        .property-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+
+        .color-indicator {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 3px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Monopoly Board</h1>
+            <p>WebAssembly Edition - Powered by C++</p>
+        </div>
+
+        <div class="wasm-status">
+            <span class="status-indicator status-loading" id="statusIndicator"></span>
+            <span id="statusText">Loading WebAssembly module...</span>
+        </div>
+
+        <div class="main-content">
+            <div class="control-panel">
+                <h3>🎮 Game Controls</h3>
+                
+                <div class="form-group">
+                    <label for="propertyName">Property Name:</label>
+                    <input type="text" id="propertyName" placeholder="Enter property name">
+                </div>
+
+                <div class="form-group">
+                    <label for="propertyColor">Color:</label>
+                    <select id="propertyColor">
+                        <option value="Brown">Brown</option>
+                        <option value="Light Blue">Light Blue</option>
+                        <option value="Pink">Pink</option>
+                        <option value="Orange">Orange</option>
+                        <option value="Red">Red</option>
+                        <option value="Yellow">Yellow</option>
+                        <option value="Green">Green</option>
+                        <option value="Dark Blue">Dark Blue</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="propertyValue">Value ($):</label>
+                    <input type="number" id="propertyValue" placeholder="Property value" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="propertyRent">Rent ($):</label>
+                    <input type="number" id="propertyRent" placeholder="Rent amount" min="0">
+                </div>
+
+                <button class="btn btn-success" onclick="addProperty()">Add Property</button>
+                <button class="btn" onclick="loadAllProperties()">Load All Properties</button>
+                <button class="btn btn-secondary" onclick="sortProperties()">Sort by Value</button>
+                <button class="btn" onclick="loadGameStats()">Show Statistics</button>
+                <button class="btn btn-danger" onclick="clearResults()">Clear Results</button>
+            </div>
+
+            <div class="results-panel">
+                <h3>📊 Results</h3>
+                <div class="results-content" id="resultsContent">
+                    <div class="loading">
+                        <p>WebAssembly module is loading...</p>
+                        <p>This may take a few moments.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        let Module = {};
+        let wasmReady = false;
+
+        // WebAssembly module configuration
+        Module = {
+            onRuntimeInitialized: function() {
+                wasmReady = true;
+                updateStatus('ready', 'WebAssembly module loaded successfully!');
+                loadAllProperties();
+            },
+            onAbort: function() {
+                updateStatus('error', 'Failed to load WebAssembly module');
+            }
+        };
+
+        function updateStatus(status, message) {
+            const indicator = document.getElementById('statusIndicator');
+            const text = document.getElementById('statusText');
+            
+            indicator.className = `status-indicator status-${status}`;
+            text.textContent = message;
+        }
+
+        function loadAllProperties() {
+            if (!wasmReady) {
+                showError('WebAssembly module not ready yet');
+                return;
+            }
+
+            try {
+                const result = Module.ccall('getAllProperties', 'string', [], []);
+                const data = JSON.parse(result);
+                displayProperties(data.properties);
+            } catch (error) {
+                showError('Error loading properties: ' + error.message);
+            }
+        }
+
+        function addProperty() {
+            if (!wasmReady) {
+                showError('WebAssembly module not ready yet');
+                return;
+            }
+
+            const name = document.getElementById('propertyName').value;
+            const color = document.getElementById('propertyColor').value;
+            const value = parseInt(document.getElementById('propertyValue').value);
+            const rent = parseInt(document.getElementById('propertyRent').value);
+
+            if (!name || !value || !rent) {
+                showError('Please fill in all fields');
+                return;
+            }
+
+            try {
+                Module.ccall('addProperty', null, ['string', 'string', 'number', 'number'], [name, color, value, rent]);
+                showSuccess('Property added successfully!');
+                loadAllProperties();
+            } catch (error) {
+                showError('Error adding property: ' + error.message);
+            }
+        }
+
+        function sortProperties() {
+            if (!wasmReady) {
+                showError('WebAssembly module not ready yet');
+                return;
+            }
+
+            try {
+                Module.ccall('sortProperties', null, [], []);
+                showSuccess('Properties sorted by value!');
+                loadAllProperties();
+            } catch (error) {
+                showError('Error sorting properties: ' + error.message);
+            }
+        }
+
+        function loadGameStats() {
+            if (!wasmReady) {
+                showError('WebAssembly module not ready yet');
+                return;
+            }
+
+            try {
+                const result = Module.ccall('getGameStats', 'string', [], []);
+                const stats = JSON.parse(result);
+                displayStats(stats);
+            } catch (error) {
+                showError('Error loading statistics: ' + error.message);
+            }
+        }
+
+        function displayProperties(properties) {
+            const content = document.getElementById('resultsContent');
+            
+            if (!properties || properties.length === 0) {
+                content.innerHTML = '<div class="loading">No properties found</div>';
+                return;
+            }
+
+            let html = '';
+            properties.forEach((property, index) => {
+                html += `
+                    <div class="property-card">
+                        <div class="property-name">
+                            <span class="color-indicator" style="background-color: ${getColorCode(property.color)}"></span>
+                            ${property.name}
+                        </div>
+                        <div class="property-details">
+                            <div><strong>Color:</strong> ${property.color}</div>
+                            <div><strong>Value:</strong> $${property.value}</div>
+                            <div><strong>Rent:</strong> $${property.rent}</div>
+                            <div><strong>Index:</strong> ${index}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            content.innerHTML = html;
+        }
+
+        function displayStats(stats) {
+            const content = document.getElementById('resultsContent');
+            
+            let html = `
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value">${stats.totalProperties}</div>
+                        <div class="stat-label">Total Properties</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">$${stats.totalValue.toLocaleString()}</div>
+                        <div class="stat-label">Total Value</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">$${stats.averageValue.toFixed(2)}</div>
+                        <div class="stat-label">Average Value</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">${Object.keys(stats.colorGroups).length}</div>
+                        <div class="stat-label">Color Groups</div>
+                    </div>
+                </div>
+                <h4 style="margin-top: 20px; color: #2c3e50;">Color Distribution:</h4>
+            `;
+
+            for (const [color, count] of Object.entries(stats.colorGroups)) {
+                html += `
+                    <div style="margin: 10px 0; padding: 10px; background: white; border-radius: 5px; border: 1px solid #dee2e6;">
+                        <span class="color-indicator" style="background-color: ${getColorCode(color)}"></span>
+                        <strong>${color}:</strong> ${count} properties
+                    </div>
+                `;
+            }
+
+            content.innerHTML = html;
+        }
+
+        function getColorCode(color) {
+            const colors = {
+                'Brown': '#8B4513',
+                'Light Blue': '#87CEEB',
+                'Pink': '#FFC0CB',
+                'Orange': '#FFA500',
+                'Red': '#FF0000',
+                'Yellow': '#FFFF00',
+                'Green': '#008000',
+                'Dark Blue': '#000080'
+            };
+            return colors[color] || '#666';
+        }
+
+        function showError(message) {
+            const content = document.getElementById('resultsContent');
+            content.innerHTML = `<div class="error">${message}</div>`;
+        }
+
+        function showSuccess(message) {
+            const content = document.getElementById('resultsContent');
+            content.innerHTML = `<div style="color: #28a745; background: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 5px;">${message}</div>`;
+        }
+
+        function clearResults() {
+            document.getElementById('resultsContent').innerHTML = '<div class="loading">Results cleared</div>';
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStatus('loading', 'Loading WebAssembly module...');
+        });
+    </script>
+
+    <!-- Load the WebAssembly module -->
+    <script src="monopoly_board_wasm.js"></script>
+</body>
+</html>

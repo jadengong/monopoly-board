@@ -162,9 +162,43 @@ The project includes comprehensive testing that demonstrates:
 - **Documentation**: Comprehensive inline documentation
 - **Separation of Concerns**: Clean separation between interface and implementation
 
+## 🌐 WebAssembly Edition
+
+This project now includes a **WebAssembly version** that runs directly in web browsers!
+
+### **WebAssembly Features**
+- **Browser Compatibility**: Runs in all modern browsers without installation
+- **High Performance**: Near-native C++ performance in web browsers
+- **Interactive Web Interface**: Beautiful, responsive UI for property management
+- **Real-time Updates**: Dynamic content without page refreshes
+- **Cross-Platform**: Works on desktop, tablet, and mobile devices
+
+### **Quick Start - WebAssembly**
+```bash
+# Install Emscripten SDK
+git clone https://github.com/emscripten-core/emsdk.git
+cd emsdk && ./emsdk install latest && ./emsdk activate latest
+
+# Build WebAssembly version
+./build_wasm.sh  # Linux/macOS
+# or
+build_wasm.bat   # Windows
+
+# Start web server
+cd build_wasm && python -m http.server 8000
+# Open http://localhost:8000 in your browser
+```
+
+See [README_WASM.md](README_WASM.md) for complete WebAssembly documentation.
+
 ## Future Enhancements
 
 Potential improvements for future development:
+- **AI Players**: Machine learning-powered game opponents
+- **Real-time Multiplayer**: WebSocket-based multiplayer gameplay
+- **Game Persistence**: Save/load functionality with JSON serialization
+- **Advanced Graphics**: WebGL-based 3D board visualization
+- **Mobile App**: React Native or Flutter wrapper
 - Iterator support for range-based loops
 - Unit testing framework integration
 - Doxygen documentation generation
