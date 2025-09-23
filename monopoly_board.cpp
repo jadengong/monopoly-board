@@ -58,12 +58,11 @@ public:
 
     // Operator overload for print
     std::ostream& operator<<(std::ostream& os, const MonopolyBoard& obj) {
-
-        cout << "Property found! Details below: " << endl;
-        cout << "Property Name: " << obj.propertyName << endl;
-        cout << "Property Color: " << obj.propertyColor << endl;
-        cout << "Value: $" << obj.value << endl;
-        cout << "Rent: $" << obj.rent << endl;
+        os << "Property found! Details below: " << std::endl;
+        os << "Property Name: " << obj.propertyName << std::endl;
+        os << "Property Color: " << obj.propertyColor << std::endl;
+        os << "Value: $" << obj.value << std::endl;
+        os << "Rent: $" << obj.rent;
         return os;
     }
 
@@ -518,8 +517,13 @@ public:
      *
      * @return "true" if empty, "false" if not empty
      */
-    bool isListEmpty() {
+    bool isListEmpty() const {
         return headNode == nullptr;
+    }
+
+    // Return the number of nodes in the list
+    size_t getSize() const {
+        return static_cast<size_t>(size);
     }
 
     /**
@@ -540,6 +544,46 @@ public:
         }while(temp != headNode);
 
         cout << "Total count of nodes is: " << count << endl;
+    }
+
+    // Returns true if an equal value exists in the list
+    bool contains(const T& value) const {
+        if (headNode == nullptr) {
+            return false;
+        }
+        const Node<T>* temp = headNode;
+        do {
+            if (temp->data.isEqual(value)) {
+                return true;
+            }
+            temp = temp->nextNode;
+        } while (temp != headNode);
+        return false;
+    }
+
+    // Peek at head value without removal
+    const T* peekHead() const {
+        if (headNode == nullptr) return nullptr;
+        return &headNode->data;
+    }
+
+    // Peek at tail value without removal
+    const T* peekTail() const {
+        if (tailNode == nullptr) return nullptr;
+        return &tailNode->data;
+    }
+
+    // Copy all elements to a vector (snapshot)
+    std::vector<T> toVector() const {
+        std::vector<T> result;
+        if (headNode == nullptr) return result;
+        result.reserve(static_cast<size_t>(size));
+        const Node<T>* temp = headNode;
+        do {
+            result.push_back(temp->data);
+            temp = temp->nextNode;
+        } while (temp != headNode);
+        return result;
     }
 
     //Optional Tasks
