@@ -317,18 +317,23 @@ public:
             throw EmptyListException("delete at position " + to_string(position));
         }
 
-        if(position == 0) { // If the position specified is at the head ...
-            deleteAtHead();
-        }else if(position == size) { // Or tail
-            deleteAtTail();
-        }else if(position < 0 || position >= size) { // Throw an invalid argument for non-acceptable positions
+        if(position < 0 || position >= size) { // Validate bounds early
             throw InvalidPositionException(position, size);
         }
-            // Otherwise iterate until we reach the node prior to the one we want to delete
-            Node<T> *temp = headNode;
-            int posCount = 0; // Initialize a position count to compare with position input
 
-        for(posCount = 0; posCount < position - 1; posCount++) { // Traverse the CLL until we reach the position before the position we want to delete at
+        if(position == 0) { // Delete at head
+            deleteAtHead();
+            return;
+        }
+
+        if(position == size - 1) { // Delete at tail (last index)
+            deleteAtTail();
+            return;
+        }
+
+        // Otherwise iterate until we reach the node prior to the one we want to delete
+        Node<T> *temp = headNode;
+        for(int posCount = 0; posCount < position - 1; posCount++) { // Traverse the CLL until we reach the position before the position we want to delete at
             temp = temp->nextNode;
         }
 
@@ -388,8 +393,13 @@ public:
         // Reverse by keeping track of the current and previous node while iterating
         // And setting previous to current, and current to nextNode
 
+        if (headNode == nullptr || headNode->nextNode == headNode) {
+            return; // empty or single node list is unchanged
+        }
+
         Node<T> *current = headNode;
         Node<T> *previous = nullptr;
+        Node<T> *oldHead = headNode;
 
         do {
             Node<T> *next = current->nextNode; // Keeps track of the next node
@@ -400,6 +410,7 @@ public:
 
         headNode->nextNode = previous; // Link the head (backwards) to the last node
         headNode = previous; // Update headNode
+        tailNode = oldHead; // Tail becomes the old head
 
     }
 
